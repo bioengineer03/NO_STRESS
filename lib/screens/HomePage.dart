@@ -8,8 +8,9 @@ import 'package:no_stress/providers/data_provider.dart';
 import 'package:no_stress/screens/LoginPage.dart';
 import 'package:no_stress/screens/ProfilePage.dart';
 import 'package:no_stress/screens/DailyCheckInPage.dart';
-import 'package:no_stress/utils/StressScoreSlider.dart';
 import 'package:no_stress/utils/emoji_helper.dart';
+import 'package:no_stress/utils/HealthCard.dart';
+import 'package:no_stress/screens/GraphicPage.dart';
 //import 'package:no_stress/screens/StressPage.dart';
 
 
@@ -124,6 +125,8 @@ class HomePage extends StatelessWidget {
                                 onTap: () {
                                   // function that calls the provider function passing the date before the current date
                                     provider.subtractDay();
+                                    print('HeartRates length: ${provider.heartRates.length}');
+                                    print('Sleep length: ${provider.sleep.length}');
                                 },
                                 child: const Icon(Icons.navigate_before),
                               ),
@@ -179,33 +182,6 @@ class HomePage extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(height: 20),
-                              Container(
-                                margin: const EdgeInsets.only(
-                                  top: 20,
-                                  bottom: 10,
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: const BorderRadius.all(
-                                        Radius.circular(10),
-                                      ),
-                                      // LinearProgressIndicator usa solo valori normalizzati tra 0 e 1
-                                      child: StressScoreSlider(stressScore: provider.stressscore),
-                                    ),
-                                    SizedBox(height: 4),
-                                    // Min e Max a sinistra e destra sotto la barra
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: const [
-                                        Text('0', style: TextStyle(color: Colors.black)),
-                                        Text('100', style: TextStyle(color: Colors.black)),
-                                      ],
-                                    ),
-                                  ], 
-                                ),
-                              ), 
                               Text(
                                 'Il tuo STRESS SCORE: ${provider.stressscore}',
                                 style: TextStyle(fontSize: 16),
@@ -213,7 +189,12 @@ class HomePage extends StatelessWidget {
                               const SizedBox(height: 15),
                             ],
                           )
-                        ),  
+                        ),
+                        provider.loading ? Center(child: CircularProgressIndicator.adaptive()): 
+                        HealthCard(title: 'Stress Score', icon: Icons.archive, value: provider.stressscore.toString(), unit: 'Stress score',
+                        onTap: (){
+                          Navigator.push(context,MaterialPageRoute(builder: (context) => GraphicPage()));
+                        })
                       ],
                     ),
                   );
@@ -223,9 +204,12 @@ class HomePage extends StatelessWidget {
           ),
         )
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.self_improvement),
-        tooltip: 'Vai a NoStress',
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Color(0xFF1E6F50),
+        label: Text(
+          'Aggiorna il tuo stress score',
+          style: TextStyle(color: Colors.white),
+        ),
         onPressed: () {
           Navigator.push(
             context,
@@ -233,6 +217,7 @@ class HomePage extends StatelessWidget {
           );
         },
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   } //build
 } //HomePage

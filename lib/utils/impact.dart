@@ -130,15 +130,17 @@ class Impact{
     //if OK parse the response, otherwise return null
     if (response.statusCode == 200) {
       final decodedResponse = jsonDecode(response.body);
-      
+      /*
       print(decodedResponse['data']['date']);
       print(decodedResponse['data']['date'][0]);
       print(decodedResponse['data']['date'][0].runtimeType);
+      */
+      final dateStr = decodedResponse['data']['date'][0];  // CORRETTO: estrai la stringa data
       // In Body di Response c'è un campo dato dal dizionario data di heartrate, costituito da coppie tempo-valore
       // Solo due valori, perchè abbiamo costruito HR in modo da prendere solo tempo e valore di bpm (confidence) non ci serve
 
       for (var i = 0; i < decodedResponse['data']['data'].length; i++) {
-        result.add(HR.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data'][i]));
+        result.add(HR.fromJson(dateStr, decodedResponse['data']['data'][i]));
       }//for
     } //if
 
@@ -191,9 +193,11 @@ class Impact{
     //if OK parse the response, otherwise return null
     if (response.statusCode == 200) {
       final decodedResponse = jsonDecode(response.body);
+
+      final dateStr = decodedResponse['data']['date'][0];  // CORRETTO
       // In Body di Response c'è un campo dato dal dizionario data di sleep, costituito da triplette datainiziosonno - livellosonno - secondisessione
       for (var i = 0; i < decodedResponse['data']['data'].length; i++) {
-        result.add(Sleep.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data'][i]));
+        result.add(Sleep.fromJson(dateStr, decodedResponse['data']['data'][i]));
       }//for
     } //if
     

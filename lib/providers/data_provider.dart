@@ -58,7 +58,7 @@ class DataProvider extends ChangeNotifier {
     double w1 = 0.4;
     double w2 = 0.6;
 
-    return (100*(w1*meanBpm + w2*(1-efficiency))).round();
+    return (100*(w1*meanBpm.clamp(0,150) + w2*(1-efficiency.clamp(0.0, 1.0)))).round().clamp(0, 100);
 
   }
   

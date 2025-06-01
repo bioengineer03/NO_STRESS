@@ -31,14 +31,16 @@ dependencies:
   flutter:
     sdk: flutter
   http:
-  shared_preferences:
+  shared_preferences: ^2.5.3
+  fl_chart: ^1.0.0
+  graphic: ^0.5.0
   intl:
   jwt_decoder:
-  syncfusion_flutter_charts: 
   provider:
+  syncfusion_flutter_charts: 
+  
   circle_score_indicator: 
-  flutter_emoji: 
-  animated_emoji: 
+  flutter_emoji: ^2.5.1
   circular_progress_stack:
 
   # The following adds the Cupertino Icons font to your application.

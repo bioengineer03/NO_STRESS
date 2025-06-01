@@ -24,9 +24,7 @@ class HR{
   */
   HR.fromJson(String date, Map<String, dynamic> json) :
       time = DateFormat('yyyy-MM-dd HH:mm:ss').parse('$date ${json["time"]}'),
-      value = json["value"] is String
-      ? int.parse(json["value"])
-      : json["value"] as int;
+      value = json["value"];
   
   /*
   @override
