@@ -194,13 +194,9 @@ class Impact{
     //if OK parse the response, otherwise return null
     if (response.statusCode == 200) {
       final decodedResponse = jsonDecode(response.body);
-<<<<<<< HEAD
 
       final dateStr = decodedResponse['data']['date'][0];  // CORRETTO
       // In Body di Response c'è un campo dato dal dizionario data di sleep, costituito da triplette datainiziosonno - livellosonno - secondisessione
-=======
-      
->>>>>>> 60227a3 (no_stress TOMMY 1/06/25)
       for (var i = 0; i < decodedResponse['data']['data'].length; i++) {
         result.add(Sleep.fromJson(dateStr, decodedResponse['data']['data'][i]));
       }//for

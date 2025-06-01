@@ -59,16 +59,12 @@ class DataProvider extends ChangeNotifier {
     
     
     stressscore = _calculateStressScore(heartRates,sleep);
-<<<<<<< HEAD
     meanBPM = _meanBPM(heartRates);
+    hrvTrend = _getHRVTrend(heartRates);
+    hrvList = hrvTrend.map((data) => HRV(time: data['time'], hrv: data['hrv'])).toList();
+    bpmTrend = _getBpmTrend(heartRates);
+    bpmList = bpmTrend.map((data) => BPM(tempo: data['time'], bpm: data['bpm'])).toList();
     
-=======
-    hrvTrend = _getHRVTrend(heartRates); // ritorna la lista di mappe con i dati HRV-time creata sotto
-    hrvList = hrvTrend.map((e) => HRV(time: e['time'], hrv: e['hrv'])).toList();
-
-    bpmTrend = _getBpmTrend(heartRates); // ritorna la lista di mappe con i dati BPM-time creata sotto
-    bpmList = bpmTrend.map((e) => BPM(tempo: e['time'], bpm: e['bpm'])).toList();
->>>>>>> 60227a3 (no_stress TOMMY 1/06/25)
     notifyListeners();
   }
   
@@ -91,13 +87,8 @@ class DataProvider extends ChangeNotifier {
     double w1 = 0.4;
     double w2 = 0.6;
 
-<<<<<<< HEAD
-    return (100*(w1*meanBpm.clamp(0,150) + w2*(1-efficiency.clamp(0.0, 1.0)))).round().clamp(0, 100);
-
-=======
     //return (100*(w1*meanBpm + w2*(1-efficiency))).round().clamp(0,100);
     return (100 * (w1 * bpmNorm + w2 * inefficiency)).round().clamp(0, 100);
->>>>>>> 60227a3 (no_stress TOMMY 1/06/25)
   }
 
   int _meanBPM(List<HR> hr){
