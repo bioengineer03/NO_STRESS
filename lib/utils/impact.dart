@@ -119,7 +119,7 @@ class Impact{
 
     String formattedDate = DateFormat('yyyy-MM-dd').format(date);
     //Create the (representative) request
-    final url = '${Impact.baseUrl}${Impact.heartrateEndpoint}${Impact.patientUsername}/day/$formattedDate/';
+    final url = Impact.baseUrl + Impact.heartrateEndpoint + Impact.patientUsername + '/day/$formattedDate/';
     // HttpHeaders = serve per fare una chiamata autenticata (la importo sopra con import 'dart:io')
     final headers = {HttpHeaders.authorizationHeader: 'Bearer $access'};
 
@@ -130,17 +130,15 @@ class Impact{
     //if OK parse the response, otherwise return null
     if (response.statusCode == 200) {
       final decodedResponse = jsonDecode(response.body);
-      /*
+      
       print(decodedResponse['data']['date']);
       print(decodedResponse['data']['date'][0]);
       print(decodedResponse['data']['date'][0].runtimeType);
-      */
-      final dateStr = decodedResponse['data']['date'][0];  // CORRETTO: estrai la stringa data
       // In Body di Response c'è un campo dato dal dizionario data di heartrate, costituito da coppie tempo-valore
       // Solo due valori, perchè abbiamo costruito HR in modo da prendere solo tempo e valore di bpm (confidence) non ci serve
 
       for (var i = 0; i < decodedResponse['data']['data'].length; i++) {
-        result.add(HR.fromJson(dateStr, decodedResponse['data']['data'][i]));
+        result.add(HR.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data'][i]));
       }//for
     } //if
 
@@ -171,8 +169,7 @@ class Impact{
         final sp = await SharedPreferences.getInstance();
         await sp.remove('access');
         await sp.remove('refresh'); 
-        MaterialPageRoute(builder: (context) => LoginPage());
-          
+        MaterialPageRoute(builder: ((context) => LoginPage()));
       }else{
         // Caso in cui il refresh token non è scaduto!
         await refreshTokens();
@@ -183,7 +180,7 @@ class Impact{
 
     String formattedDate = DateFormat('yyyy-MM-dd').format(date);
     //Create the (representative) request
-    final url = '${Impact.baseUrl}${Impact.sleepEndpoint}${Impact.patientUsername}/day/$formattedDate/';
+    final url = Impact.baseUrl + Impact.sleepEndpoint + Impact.patientUsername + '/day/$formattedDate/';
     // HttpHeaders = serve per fare una chiamata autenticata (la importo sopra con import 'dart:io')
     final headers = {HttpHeaders.authorizationHeader: 'Bearer $access'};
 
@@ -191,6 +188,7 @@ class Impact{
     print('Calling: $url');
     final response = await http.get(Uri.parse(url), headers: headers);
     
+    //if OK parse the response, otherwise return null
     //if OK parse the response, otherwise return null
     if (response.statusCode == 200) {
       final decodedResponse = jsonDecode(response.body);
@@ -206,8 +204,8 @@ class Impact{
     
     //Return the result
     return result;
-  } //getSleepdata
+  } //_sleeprequestData
 
 }//Impact
 
-  
+ 

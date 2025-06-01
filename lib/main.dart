@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       home: SplashScreen()
     ),);
     /* Equivalent version with MultiProvider
-    return MaterialApp(
+    return MaterialApp(fl
       home: MultiProvider(
         providers: [
           Provider<DataProvider>(create: (_) => DataProvider()),

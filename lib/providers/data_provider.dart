@@ -60,11 +60,13 @@ class DataProvider extends ChangeNotifier {
     
     stressscore = _calculateStressScore(heartRates,sleep);
     meanBPM = _meanBPM(heartRates);
-    hrvTrend = _getHRVTrend(heartRates);
-    hrvList = hrvTrend.map((data) => HRV(time: data['time'], hrv: data['hrv'])).toList();
-    bpmTrend = _getBpmTrend(heartRates);
-    bpmList = bpmTrend.map((data) => BPM(tempo: data['time'], bpm: data['bpm'])).toList();
-    
+
+    hrvTrend = _getHRVTrend(heartRates); // ritorna la lista di mappe con i dati HRV-time creata sotto
+    hrvList = hrvTrend.map((e) => HRV(time: e['time'], hrv: e['hrv'])).toList();
+
+    bpmTrend = _getBpmTrend(heartRates); // ritorna la lista di mappe con i dati BPM-time creata sotto
+    bpmList = bpmTrend.map((e) => BPM(tempo: e['time'], bpm: e['bpm'])).toList();
+
     notifyListeners();
   }
   
