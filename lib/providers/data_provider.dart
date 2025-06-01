@@ -21,6 +21,7 @@ class DataProvider extends ChangeNotifier {
   double w4 = 0.30; // peso media BPM
   double w5 = 0.30;
   int stressscore = 0;
+  int meanBPM = 0;
 
   final Impact impact = Impact(); // Inizializzo istanza impact
   
@@ -39,6 +40,7 @@ class DataProvider extends ChangeNotifier {
     sleep = await impact.getSleepdata(date);
     
     stressscore = _calculateStressScore(heartRates,sleep);
+    meanBPM = _meanBPM(heartRates);
     
     notifyListeners();
   }
@@ -60,6 +62,10 @@ class DataProvider extends ChangeNotifier {
 
     return (100*(w1*meanBpm.clamp(0,150) + w2*(1-efficiency.clamp(0.0, 1.0)))).round().clamp(0, 100);
 
+  }
+
+  int _meanBPM(List<HR> hr){
+    return Dati.meanBpm(hr).round();
   }
   
   void addDay() {

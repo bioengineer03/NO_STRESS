@@ -9,8 +9,6 @@ import 'package:no_stress/screens/LoginPage.dart';
 import 'package:no_stress/screens/ProfilePage.dart';
 import 'package:no_stress/screens/DailyCheckInPage.dart';
 import 'package:no_stress/utils/emoji_helper.dart';
-import 'package:no_stress/utils/HealthCard.dart';
-import 'package:no_stress/screens/GraphicPage.dart';
 //import 'package:no_stress/screens/StressPage.dart';
 
 
@@ -190,11 +188,6 @@ class HomePage extends StatelessWidget {
                             ],
                           )
                         ),
-                        provider.loading ? Center(child: CircularProgressIndicator.adaptive()): 
-                        HealthCard(title: 'Stress Score', icon: Icons.archive, value: provider.stressscore.toString(), unit: 'Stress score',
-                        onTap: (){
-                          Navigator.push(context,MaterialPageRoute(builder: (context) => GraphicPage()));
-                        })
                       ],
                     ),
                   );
