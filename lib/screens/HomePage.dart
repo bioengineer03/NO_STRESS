@@ -9,6 +9,9 @@ import 'package:no_stress/screens/LoginPage.dart';
 import 'package:no_stress/screens/ProfilePage.dart';
 import 'package:no_stress/screens/DailyCheckInPage.dart';
 import 'package:no_stress/utils/emoji_helper.dart';
+import 'package:no_stress/screens/HRVPage.dart';
+import 'package:no_stress/screens/BpmPage.dart';
+import 'package:statistics/statistics.dart';
 //import 'package:no_stress/screens/StressPage.dart';
 
 
@@ -32,7 +35,7 @@ class HomePage extends StatelessWidget {
         ),
       ),
       drawer: Drawer(
-        child:Column(
+        child:ListView(
           children:[
             ListTile(
               leading: Icon(Icons.person), // Icona profilo
@@ -79,8 +82,10 @@ class HomePage extends StatelessWidget {
             top:10,
             bottom: 20,
           ),
-          child:Column(
-            children: [
+          child:SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
               // Riga in cui scriviamo "Ciao User"
               Row(
                 children: [
@@ -192,23 +197,85 @@ class HomePage extends StatelessWidget {
                     ),
                   );
                 },
-              )
+              ),
+
+              // INSERISCO LA CARD PER IL TREND DELLA HRV
+              SizedBox(height: 20),
+              Consumer<DataProvider>(
+                builder: (context, dataProvider, child) {
+                  //final hrvTrend = dataProvider.hrvTrend;
+                  final hrvList = dataProvider.hrvList;
+                  final meanHRV = hrvList.isNotEmpty
+                    ? hrvList.map((b) => b.hrv).mean.toStringAsFixed(0)
+                    : '--';
+                  // Controllo se hrvList è vuota
+                  if (hrvList.isEmpty) {
+                    return Center(child: Text('No HRV data available for this date.'));
+                  }
+                  // Mostro la card con l'ultimo valore di HRV
+                  return HealthStatCard(
+                    title: 'HRV',
+                    value: meanHRV != null ? '$meanHRV ms' : '--',
+                    subtitle: 'Mean value',
+                    icon: Icons.monitor_heart,
+                    color: Color(0xFF1E6F50),
+                    onTap: () {
+                      Navigator.push(context,MaterialPageRoute(builder: (context) => 
+                      HRVPage(hrvData: hrvList),),);
+                    },
+                  );
+                }, // builder
+              ),
+              // INSERISCO LA CARD PER IL TREND DELLA BPM
+              SizedBox(height: 20),
+              Consumer<DataProvider>(
+                builder: (context, dataProvider, child) {
+                  //final bpmTrend = dataProvider.hrvTrend;
+                  final bpmList = dataProvider.bpmList;
+                  final meanBPM = bpmList.isNotEmpty
+                  ? bpmList.map((b) => b.bpm).mean.toStringAsFixed(0)
+                  : '--';
+                  // Controllo se hrvList è vuota
+                  if (bpmList.isEmpty) {
+                    return Center(child: Text('No BPM data available for this date.'));
+                  } 
+                  // Mostro la card con l'ultimo valore di BPM
+                  return HealthStatCard(
+                    title: 'BPM',
+                    value: meanBPM != null ? '$meanBPM' : '--',
+                    subtitle: 'Mean value',
+                    icon: Icons.monitor_heart,
+                    color: Color(0xFF1E6F50),
+                    onTap: () {
+                      Navigator.push(context,MaterialPageRoute(builder: (context) => 
+                      BPMPage(bpmData: bpmList),),);
+                    },
+                  );
+                }, // builder
+              ),
             ], // children
           ),
         )
       ),
+<<<<<<< HEAD
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: Color(0xFF1E6F50),
         label: Text(
           'Aggiorna il tuo stress score',
           style: TextStyle(color: Colors.white),
         ),
+=======
+      ),
+      floatingActionButton: FloatingActionButton(
+        tooltip: 'Vai a NoStress',
+>>>>>>> 60227a3 (no_stress TOMMY 1/06/25)
         onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => DailyCheckInPage()),
           );
         },
+        child: Icon(Icons.self_improvement),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
