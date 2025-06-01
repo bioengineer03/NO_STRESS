@@ -257,18 +257,9 @@ class HomePage extends StatelessWidget {
           ),
         )
       ),
-<<<<<<< HEAD
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Color(0xFF1E6F50),
-        label: Text(
-          'Aggiorna il tuo stress score',
-          style: TextStyle(color: Colors.white),
-        ),
-=======
       ),
       floatingActionButton: FloatingActionButton(
         tooltip: 'Vai a NoStress',
->>>>>>> 60227a3 (no_stress TOMMY 1/06/25)
         onPressed: () {
           Navigator.push(
             context,
