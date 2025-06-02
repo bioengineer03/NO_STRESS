@@ -149,6 +149,18 @@ class HomePage extends StatelessWidget {
                             ),
                           ],
                         ),
+                        if (provider.stressscore < 0) 
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Center(
+                            child: Text(
+                              "I dati di questa giornata non sono disponibili",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 20, color: Colors.black54),
+                            ),
+                          ),
+                        )
+                        else
                         // Verifica che non abbiamo già le liste dei dati di HR e sleep caricati
                         provider.loading ? Center(child: CircularProgressIndicator.adaptive()) : 
                         Center(
@@ -258,7 +270,8 @@ class HomePage extends StatelessWidget {
         )
       ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Color(0xFF1E6F50),
         tooltip: 'Vai a NoStress',
         onPressed: () {
           Navigator.push(
@@ -266,7 +279,10 @@ class HomePage extends StatelessWidget {
             MaterialPageRoute(builder: (context) => DailyCheckInPage()),
           );
         },
-        child: Icon(Icons.self_improvement),
+        label: Text(
+          'Aggiorna il tuo stress score',
+          style: TextStyle(color: Colors.white), // Scritta bianca
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );

@@ -6,8 +6,6 @@ import 'package:no_stress/utils/impact.dart';
 import 'package:no_stress/utils/dati.dart';
 import 'dart:math';
 
-
-
 class DataProvider extends ChangeNotifier {
   // Variabili di stato
   DateTime currentDate = DateTime.now();
@@ -80,17 +78,23 @@ class DataProvider extends ChangeNotifier {
   int _calculateStressScore(List<HR> hr,List<Sleep> sleep){
     // Indica il numero di volte che ha dormito durante il giorno
     // Ovvero corrisponde al numero di oggetti Sleep che abbiamo dentro la lista sleep
-    int meanBpm = Dati.meanBpm(hr);
-    double efficiency = Dati.getEfficiency(sleep);
-     // Normalizza BPM: 40 bpm = 0 (rilassato), 100 bpm = 1 (stress alto)
-    double bpmNorm = ((meanBpm - 40) / 60).clamp(0.0, 1.0);
-    double inefficiency = (1 - efficiency).clamp(0.0, 1.0);
+    var lengthHR = hr.length;
+    var lengthSleep = sleep.length;
+    if (lengthHR == 0 && lengthSleep  == 0){ 
+      return -1;
+    }else{
+      int meanBpm = Dati.meanBpm(hr);
+      double efficiency = Dati.getEfficiency(sleep);
+      // Normalizza BPM: 40 bpm = 0 (rilassato), 100 bpm = 1 (stress alto)
+      double bpmNorm = ((meanBpm - 40) / 60).clamp(0.0, 1.0);
+      double inefficiency = (1 - efficiency).clamp(0.0, 1.0);
 
-    double w1 = 0.4;
-    double w2 = 0.6;
-
-    //return (100*(w1*meanBpm + w2*(1-efficiency))).round().clamp(0,100);
-    return (100 * (w1 * bpmNorm + w2 * inefficiency)).round().clamp(0, 100);
+      double w1 = 0.4;
+      double w2 = 0.6;
+      
+      //return (100*(w1*meanBpm + w2*(1-efficiency))).round().clamp(0,100);
+      return (100 * (w1 * bpmNorm + w2 * inefficiency)).round().clamp(0, 100);
+    }
   }
 
   int _meanBPM(List<HR> hr){
