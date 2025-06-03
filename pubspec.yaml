@@ -30,6 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  google_fonts: ^6.1.0
   http:
   shared_preferences: ^2.5.3
   graphic: ^0.5.0
@@ -83,6 +84,7 @@ flutter:
   assets:
     - assets/images/logo.png
     - assets/images/sofia.png
+    - assets/images/nuvola.png
     
 
   # An image asset can refer to one or more resolution-specific "variants", see

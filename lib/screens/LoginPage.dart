@@ -3,6 +3,7 @@ import 'package:no_stress/screens/OnBoarding.dart';
 import 'package:no_stress/screens/HomePage.dart';
 import 'package:no_stress/utils/impact.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google_fonts/google_fonts.dart'; // Importa google_fonts
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
@@ -19,95 +20,137 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
       // Si può usare se vogliamo fare vedere solo la scritta NoStress
-      //appBar: AppBar(
-       // title: Text("No Stress",style: GoogleFonts.inter(
-         //     fontSize: 50,
-           //   fontWeight: FontWeight.w600,
-           //   color: Color(0xFFF5ECD8),
-           // ),),
-        //backgroundColor: Color(0xFF1E6F50),
-        //centerTitle: true, // Centra il titolo dell'AppBar // ),
       body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            // Logo
-            Image.asset('assets/images/logo.png',height: 100),
-            const SizedBox(
-              height: 40,
-              ),
-            const Text(
-              'Welcome',
-              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 30,color: Color(0xFF1E6F50)),
-            ),
-            Padding(
-              padding:EdgeInsets.symmetric(horizontal: 15),
-              child: TextField(
-                controller: userController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius:BorderRadius.circular(20.0),
-                    borderSide: BorderSide(color: Color(0xFF1E6F50), width: 1.7),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                    borderSide: BorderSide(color: Color(0xFF1E6F50), width: 2.0),
-                  ),
-                  labelText: 'Username',
-                  floatingLabelStyle: TextStyle(color: Color(0xFF1E6F50)),
-                  hintText: 'Enter your username',
-                  hintStyle: TextStyle(color: Color(0xFF4E5D6A)),
-                  filled: true,
-                  fillColor: Colors.white,
-                  contentPadding: EdgeInsets.symmetric(vertical: 18, horizontal: 20),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 24.0,
+          ), // margini laterali per tutta la pagina
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Image.asset('assets/images/nuvola.png', height: 100),
+              const SizedBox(height: 30),
+              // Logo
+              Text(
+                'Welcome',
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 30,
+                  color: Color(0xFF1E6F50),
                 ),
-                style: TextStyle(color: Color.fromARGB(255, 16, 18, 17)),
               ),
-            ),
-            Padding(
-              padding:const EdgeInsets.only(left: 15.0, right: 15.0, top: 15, bottom: 15),
-              child: ValueListenableBuilder<bool>(
-                valueListenable: obscurePassword,
-                builder: (context, value, _) {
-                  return TextField(
-                    obscureText: value,
-                    controller: passwordController,
-                    decoration: InputDecoration(
-                      labelText: 'Password',
-                      suffixIcon: IconButton(
-                        icon: Icon(value ? Icons.visibility_off : Icons.visibility),
-                        onPressed: () => obscurePassword.value = !value,
-                      ),
-                      floatingLabelStyle: TextStyle(color: Color(0xFF1E6F50)),
-                      hintText: 'Enter Password',
-                      hintStyle: TextStyle(color: Color(0xFF4E5D6A)),
-                      filled: true,
-                      fillColor: Colors.white,
-                      contentPadding: EdgeInsets.symmetric(vertical: 18, horizontal: 20),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                        borderSide: BorderSide(color: Color(0xFF1E6F50), width: 1.7),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                        borderSide: BorderSide(color: Color(0xFF1E6F50), width: 2.0),
+              const SizedBox(height: 32),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15),
+                child: TextField(
+                  controller: userController,
+                  style: GoogleFonts.poppins(
+                    color: const Color.fromARGB(255, 16, 18, 17),
+                    fontSize: 16,
+                  ),
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                      borderSide: BorderSide(
+                        color: Color(0xFF1E6F50),
+                        width: 1.7,
                       ),
                     ),
-                  );
-                },
-              ),
-            ),
-            Container(
-              height:50,
-              width: 250,
-              decoration:BoxDecoration(
-                borderRadius: BorderRadius.circular(20)
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                      borderSide: BorderSide(
+                        color: Color(0xFF1E6F50),
+                        width: 2.0,
+                      ),
+                    ),
+                    labelText: 'Username',
+                    labelStyle: GoogleFonts.poppins(color: const Color(0xFF1E6F50)),
+                    floatingLabelStyle: GoogleFonts.poppins(
+                      color: Color(0xFF1E6F50),
+                    ),
+                    hintText: 'Enter your username',
+                    hintStyle: GoogleFonts.poppins(color: Color(0xFF1E6F50)),
+                    filled: true,
+                    fillColor: Colors.white,
+                    contentPadding: EdgeInsets.symmetric(
+                      vertical: 18,
+                      horizontal: 20,
+                    ),
+                  ),
                 ),
-              child: ElevatedButton(
-                onPressed: () async {
-                  // check if credentials are correct
-                  // Recupera username e passowrd dai controller
-                  final result = await impact.authorize(userController.text, passwordController.text);
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 15.0,
+                  right: 15.0,
+                  top: 15,
+                  bottom: 15,
+                ),
+                child: ValueListenableBuilder<bool>(
+                  valueListenable: obscurePassword,
+                  builder: (context, value, _) {
+                    return TextField(
+                      obscureText: value,
+                      controller: passwordController,
+                      style: GoogleFonts.poppins(
+                        color: const Color.fromARGB(255, 16, 18, 17),
+                        fontSize: 16,
+                      ),
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        labelStyle: GoogleFonts.poppins(color: const Color(0xFF1E6F50)),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            value ? Icons.visibility_off : Icons.visibility,
+                          ),
+                          onPressed: () => obscurePassword.value = !value,
+                        ),
+                        floatingLabelStyle: GoogleFonts.poppins(
+                          color: Color(0xFF1E6F50),
+                        ),
+                        hintText: 'Enter Password',
+                        hintStyle: GoogleFonts.poppins(
+                          color: Color(0xFF1E6F50),
+                        ),
+                        filled: true,
+                        fillColor: Colors.white,
+                        contentPadding: EdgeInsets.symmetric(
+                          vertical: 18,
+                          horizontal: 20,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                          borderSide: BorderSide(
+                            color: Color(0xFF1E6F50),
+                            width: 1.7,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                          borderSide: BorderSide(
+                            color: Color(0xFF1E6F50),
+                            width: 2.0,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              Container(
+                height: 50,
+                width: 250,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    // check if credentials are correct
+                    // Recupera username e passowrd dai controller
+                    final result = await impact.authorize(
+                      userController.text,
+                      passwordController.text,
+                    );
                     // If correct, store the username and password in SharedPreferences
                     // and navigate to the Exposure screen (pushReplacement to remove the login screen from the stack)
                     if (result == 200) {
@@ -118,18 +161,18 @@ class LoginPage extends StatelessWidget {
 
                       // Verifica se l'onboarding è stato completato e naviga in base al risultato
                       // Se non è stato completato naviga nella pagina di onboarding
-                      final onboardingCompleted = sp.getBool('onboarding_completed');
-                      if(onboardingCompleted == null || onboardingCompleted == false){
-                        Navigator.pushReplacement(
-                        // ignore: use_build_context_synchronously
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Onboarding(),
-                        ),
+                      final onboardingCompleted = sp.getBool(
+                        'onboarding_completed',
                       );
-                      // Se è stato completato, va direttamente nella HomePage
-                      }
-                      else{
+                      if (onboardingCompleted == null ||
+                          onboardingCompleted == false) {
+                        Navigator.pushReplacement(
+                          // ignore: use_build_context_synchronously
+                          context,
+                          MaterialPageRoute(builder: (context) => Onboarding()),
+                        );
+                        // Se è stato completato, va direttamente nella HomePage
+                      } else {
                         Navigator.pushReplacement(
                           // ignore: use_build_context_synchronously
                           context,
@@ -139,40 +182,57 @@ class LoginPage extends StatelessWidget {
                         );
                       }
                       // Se le credenziali sono errate, viene mostrato un messaggio di errore tramite un SnackBar
-                      }else{
-                        // ignore: use_build_context_synchronously
-                        ScaffoldMessenger.of(context)
+                    } else {
+                      // ignore: use_build_context_synchronously
+                      ScaffoldMessenger.of(context)
                         ..removeCurrentSnackBar()
-                        ..showSnackBar(SnackBar(
-                          backgroundColor: Colors.red,
-                          behavior: SnackBarBehavior.floating,
-                          margin: EdgeInsets.all(8),
-                          duration: Duration(seconds: 2),
-                          content: Text('Username or Password incorrect')));
-                      } 
-                    },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF1E6F50),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+                        ..showSnackBar(
+                          SnackBar(
+                            backgroundColor: Colors.red,
+                            behavior: SnackBarBehavior.floating,
+                            margin: EdgeInsets.all(8),
+                            duration: Duration(seconds: 2),
+                            content: Text(
+                              'Username or Password incorrect',
+                              style: TextStyle(fontFamily: 'Poppins'),
+                            ),
+                          ),
+                        );
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF1E6F50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    textStyle: GoogleFonts.poppins(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                  padding: EdgeInsets.symmetric(vertical: 12),
-                ),
-                child: Text(
-                  'Login',
-                  style: TextStyle(fontSize: 16, color: Colors.white),
+                  child: Text(
+                    'Login', 
+                    style: GoogleFonts.poppins(
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               ),
-            ),
-            const Spacer(),
-            const Align(
-              alignment: Alignment.bottomCenter,
-              child: Text(
-                "By logging in, you agree to NoStress's\nTerms & Conditions and Privacy Policy",
-                style: TextStyle(fontSize: 12),
-              )
-            ),
-          ],
+              const SizedBox(height: 100),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: Text(
+                  "By logging in, you agree to NoStress's\nTerms & Conditions and Privacy Policy",
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                    fontSize: 12,
+                    color: Colors.black54,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

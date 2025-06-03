@@ -12,28 +12,30 @@ class SplashScreen extends StatelessWidget {
     // Chiama il metodo _checkLogin che verifica l'autenticazione dell'utente
     Future.delayed(const Duration(seconds: 3), () => _checkLogin(context));
     return Scaffold(
-        body: Center(
-            child: Image.asset(
-              'assets/images/logo.png',
-            scale: 6,
-            )
-          )
-        );
+      backgroundColor: Colors.white,
+      body: Center(
+        child: Image.asset(
+          'assets/images/logo.png',
+          width: 300,
+          height: 300,
+        )
+      )
+    );
   } // build
 
-  // Metodo per navigazione da SplashScreen a HomePage
+  // Metodo privato per navigazione da SplashScreen a HomePage
   void _toHomePage(BuildContext context) {
     Navigator.of(context)
         .pushReplacement(MaterialPageRoute(builder: (context) => const HomePage()));
   } 
 
-  // Metodo per navigazione da SplashScreen a LoginPage
+  // Metodo privato per navigazione da SplashScreen a LoginPage
   void _toLoginPage(BuildContext context) {
     Navigator.of(context)
         .pushReplacement(MaterialPageRoute(builder: ((context) => LoginPage())));
   } 
-  // Method for checking if the user has still valid tokens
-  // If yes, navigate to ExposurePage, if not, navigate to LoginPage
+
+  // Metodo privato che controlla se è stato fatto il login oppure no
   void _checkLogin(BuildContext context) async {
     final result = await Impact().refreshTokens();
     if (result == 200) {
