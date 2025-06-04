@@ -84,7 +84,10 @@ flutter:
   assets:
     - assets/images/logo.png
     - assets/images/sofia.png
-    - assets/images/nuvola.png
+    - assets/images/undraw_yoga_i399.png
+    - assets/images/undraw_to-do-list_eoia.png
+    - assets/images/undraw_organizing-data_uns9.png
+    - assets/images/undraw_engineering-team_13ax.png
     
 
   # An image asset can refer to one or more resolution-specific "variants", see

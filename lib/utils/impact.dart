@@ -44,6 +44,7 @@ class Impact {
           await SharedPreferences.getInstance(); // Salvo tutto in Shared_Preferences
       sp.setString('access', decodedResponse['access']);
       sp.setString('refresh', decodedResponse['refresh']);
+      sp.setString('username', username);
     } //if
 
     //Ritorna lo statusCode

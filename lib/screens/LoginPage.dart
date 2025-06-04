@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:no_stress/screens/OnBoarding.dart';
+//import 'package:no_stress/screens/OnBoarding.dart';
 import 'package:no_stress/screens/HomePage.dart';
+import 'package:no_stress/screens/OnBoardingPage.dart';
 import 'package:no_stress/utils/impact.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_fonts/google_fonts.dart'; // Importa google_fonts
@@ -28,8 +29,8 @@ class LoginPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Image.asset('assets/images/nuvola.png', height: 100),
-              const SizedBox(height: 30),
+              Image.asset('assets/images/logo.png', scale: 7),
+              const SizedBox(height: 20),
               // Logo
               Text(
                 'Welcome',
@@ -64,7 +65,9 @@ class LoginPage extends StatelessWidget {
                       ),
                     ),
                     labelText: 'Username',
-                    labelStyle: GoogleFonts.poppins(color: const Color(0xFF1E6F50)),
+                    labelStyle: GoogleFonts.poppins(
+                      color: const Color(0xFF1E6F50),
+                    ),
                     floatingLabelStyle: GoogleFonts.poppins(
                       color: Color(0xFF1E6F50),
                     ),
@@ -98,7 +101,9 @@ class LoginPage extends StatelessWidget {
                       ),
                       decoration: InputDecoration(
                         labelText: 'Password',
-                        labelStyle: GoogleFonts.poppins(color: const Color(0xFF1E6F50)),
+                        labelStyle: GoogleFonts.poppins(
+                          color: const Color(0xFF1E6F50),
+                        ),
                         suffixIcon: IconButton(
                           icon: Icon(
                             value ? Icons.visibility_off : Icons.visibility,
@@ -145,59 +150,143 @@ class LoginPage extends StatelessWidget {
                 ),
                 child: ElevatedButton(
                   onPressed: () async {
-                    // check if credentials are correct
-                    // Recupera username e passowrd dai controller
-                    final result = await impact.authorize(
-                      userController.text,
-                      passwordController.text,
-                    );
-                    // If correct, store the username and password in SharedPreferences
-                    // and navigate to the Exposure screen (pushReplacement to remove the login screen from the stack)
-                    if (result == 200) {
-                      // Sen è riuscito salva le credenziali in shared preferences
-                      final sp = await SharedPreferences.getInstance();
-                      await sp.setString('username', userController.text);
-                      await sp.setString('password', passwordController.text);
+                    final sp = await SharedPreferences.getInstance();
+                    // (1) CASO IN CUI STO FACENDO LOGIN DOPO LOGOUT
+                    if (sp.getString('username') != null) {
+                      if (userController.text == sp.getString('username')) {
+                        // Caso in cui fa login con credenziale username giusta
+                        final result = await impact.authorize(
+                          userController.text,
+                          passwordController.text,
+                        );
+                        if (result == 200) {
+                          // QUESTO PEZZO POSSO EVITARE DI FARLO PERCHE' SENNO' MI SOVRASCRIVE USERNAME E PASSWORD CHE CI SONO GIA'
+                          // Se è riuscito salva le credenziali in shared preferences
+                          /*
+                          final sp = await SharedPreferences.getInstance();
+                          await sp.setString('username', userController.text);
+                          await sp.setString(
+                            'password',
+                            passwordController.text,
+                          );
+                          */
 
-                      // Verifica se l'onboarding è stato completato e naviga in base al risultato
-                      // Se non è stato completato naviga nella pagina di onboarding
-                      final onboardingCompleted = sp.getBool(
-                        'onboarding_completed',
-                      );
-                      if (onboardingCompleted == null ||
-                          onboardingCompleted == false) {
-                        Navigator.pushReplacement(
+                          // Verifica se l'onboarding è stato completato e naviga in base al risultato
+                          // Se non è stato completato naviga nella pagina di onboarding
+                          final onboardingCompleted = sp.getBool(
+                            'onboarding_completed',
+                          );
+                          if (onboardingCompleted == null ||
+                              onboardingCompleted == false) {
+                            Navigator.pushReplacement(
+                              // ignore: use_build_context_synchronously
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => OnboardingScreen(),
+                              ),
+                            );
+                            // Se è stato completato, va direttamente nella HomePage
+                          } else {
+                            Navigator.pushReplacement(
+                              // ignore: use_build_context_synchronously
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const HomePage(),
+                              ),
+                            );
+                          }
+                          // Se le credenziali sono errate, viene mostrato un messaggio di errore tramite un SnackBar
+                        }else{
                           // ignore: use_build_context_synchronously
-                          context,
-                          MaterialPageRoute(builder: (context) => Onboarding()),
-                        );
-                        // Se è stato completato, va direttamente nella HomePage
-                      } else {
-                        Navigator.pushReplacement(
-                          // ignore: use_build_context_synchronously
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const HomePage(),
-                          ),
-                        );
-                      }
-                      // Se le credenziali sono errate, viene mostrato un messaggio di errore tramite un SnackBar
-                    } else {
-                      // ignore: use_build_context_synchronously
-                      ScaffoldMessenger.of(context)
-                        ..removeCurrentSnackBar()
-                        ..showSnackBar(
-                          SnackBar(
-                            backgroundColor: Colors.red,
-                            behavior: SnackBarBehavior.floating,
-                            margin: EdgeInsets.all(8),
-                            duration: Duration(seconds: 2),
-                            content: Text(
-                              'Username or Password incorrect',
-                              style: TextStyle(fontFamily: 'Poppins'),
+                          ScaffoldMessenger.of(context)
+                            ..removeCurrentSnackBar()
+                            ..showSnackBar(
+                              SnackBar(
+                                backgroundColor: Colors.red,
+                                behavior: SnackBarBehavior.floating,
+                                margin: EdgeInsets.all(8),
+                                duration: Duration(seconds: 2),
+                                content: Text(
+                                  'Password incorrect',
+                                  style: TextStyle(fontFamily: 'Poppins'),
+                                ),
+                              ),
+                            );
+                        }
+                      }else{
+                        // Caso in cui fa login con credenziale username sbagliata
+                        ScaffoldMessenger.of(context)
+                          ..removeCurrentSnackBar()
+                          ..showSnackBar(
+                            SnackBar(
+                              backgroundColor: Colors.red,
+                              behavior: SnackBarBehavior.floating,
+                              margin: EdgeInsets.all(8),
+                              duration: Duration(seconds: 2),
+                              content: Text(
+                                'Username incorrect',
+                                style: TextStyle(fontFamily: 'Poppins'),
+                              ),
                             ),
-                          ),
+                          );
+                      }
+                    }else{
+                      // non ho username salvati in Shared Preferences
+                      // (2) PRIMA VOLTA CHE FACCIO LOGIN
+                      final result = await impact.authorize(
+                        userController.text,
+                        passwordController.text,
+                      );
+                      // If correct, store the username and password in SharedPreferences
+                      // and navigate to the Exposure screen (pushReplacement to remove the login screen from the stack)
+                      if (result == 200) {
+                        // Sen è riuscito salva le credenziali in shared preferences
+                        final sp = await SharedPreferences.getInstance();
+                        await sp.setString('username', userController.text);
+                        await sp.setString('password', passwordController.text);
+
+                        // Verifica se l'onboarding è stato completato e naviga in base al risultato
+                        // Se non è stato completato naviga nella pagina di onboarding
+                        final onboardingCompleted = sp.getBool(
+                          'onboarding_completed',
                         );
+                        if (onboardingCompleted == null ||
+                            onboardingCompleted == false) {
+                          Navigator.pushReplacement(
+                            // ignore: use_build_context_synchronously
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => OnboardingScreen(),
+                            ),
+                          );
+                          // Se è stato completato, va direttamente nella HomePage
+                        } else {
+                          Navigator.pushReplacement(
+                            // ignore: use_build_context_synchronously
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const HomePage(),
+                            ),
+                          );
+                        }
+                        // Se le credenziali sono errate, viene mostrato un messaggio di errore tramite un SnackBar
+                      }else{
+                        // ignore: use_build_context_synchronously
+                        ScaffoldMessenger.of(context)
+                          ..removeCurrentSnackBar()
+                          ..showSnackBar(
+                            SnackBar(
+                              backgroundColor: Colors.red,
+                              behavior: SnackBarBehavior.floating,
+                              margin: EdgeInsets.all(8),
+                              duration: Duration(seconds: 2),
+                              content: Text(
+                                'Username or Password incorrect',
+                                style: TextStyle(fontFamily: 'Poppins'),
+                              ),
+                            ),
+                          );
+                      }
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -212,10 +301,8 @@ class LoginPage extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    'Login', 
-                    style: GoogleFonts.poppins(
-                      color: Colors.white,
-                    ),
+                    'Login',
+                    style: GoogleFonts.poppins(color: Colors.white),
                   ),
                 ),
               ),
