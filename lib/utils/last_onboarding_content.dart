@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:no_stress/models/onboarding_content.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/services.dart';
 
 class LastOnboardingPageContent extends StatelessWidget {
   final OnboardingContent content;
@@ -17,7 +19,8 @@ class LastOnboardingPageContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView( // Permette lo scroll se la tastiera copre i campi
+    return SingleChildScrollView(
+      // Permette lo scroll se la tastiera copre i campi
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 60.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -25,7 +28,9 @@ class LastOnboardingPageContent extends StatelessWidget {
         children: [
           Image.asset(
             content.imagePath,
-            height: MediaQuery.of(context).size.height * 0.3, // Immagine più piccola per fare spazio agli input
+            height:
+                MediaQuery.of(context).size.height *
+                0.3, // Immagine più piccola per fare spazio agli input
             fit: BoxFit.contain,
           ),
           const SizedBox(height: 30),
@@ -42,51 +47,92 @@ class LastOnboardingPageContent extends StatelessWidget {
           Text(
             content.description,
             textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 16,
-              color: Colors.black54,
-            ),
+            style: const TextStyle(fontSize: 16, color: Colors.black54),
           ),
           const SizedBox(height: 40),
           // Campo di input per il nome
-          TextField(
-            controller: nameController,
-            decoration: InputDecoration(
-              labelText: 'Your Nickname',
-              hintText: 'Es: Bob ',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            child: TextField(
+              controller: nameController,
+              style: GoogleFonts.poppins(
+                color: const Color.fromARGB(255, 16, 18, 17),
+                fontSize: 16,
               ),
-              prefixIcon: const Icon(Icons.person),
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                  borderSide: BorderSide(color: Color(0xFF1E6F50), width: 1.7),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                  borderSide: BorderSide(color: Color(0xFF1E6F50), width: 2.0),
+                ),
+                labelText: 'Nickname',
+                labelStyle: GoogleFonts.poppins(color: const Color(0xFF1E6F50)),
+                floatingLabelStyle: GoogleFonts.poppins(
+                  color: Color(0xFF1E6F50),
+                ),
+                hintText: 'Enter your nickname',
+                hintStyle: GoogleFonts.poppins(color: Color(0xFF1E6F50)),
+                filled: true,
+                fillColor: Colors.white,
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 18,
+                  horizontal: 20,
+                ),
+              ),
             ),
-            keyboardType: TextInputType.name,
-            textCapitalization: TextCapitalization.words,
           ),
+          
           const SizedBox(height: 20),
           // Dropdown per il sesso
-          DropdownButtonFormField<String>(
-            value: selectedGender,
-            decoration: InputDecoration(
-              labelText: 'Gender',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Color(0xFF1E6F50), width: 1.7),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            child: DropdownButtonFormField<String>(
+              value: selectedGender,
+              style: GoogleFonts.poppins(
+                color: const Color.fromARGB(255, 16, 18, 17),
+                fontSize: 16,
               ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20.0),
-                borderSide: BorderSide(color: Color(0xFF1E6F50), width: 2.0),
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                  borderSide: BorderSide(color: Color(0xFF1E6F50), width: 1.7),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                  borderSide: BorderSide(color: Color(0xFF1E6F50), width: 2.0),
+                ),
+                labelText: 'Gender',
+                labelStyle: GoogleFonts.poppins(color: const Color(0xFF1E6F50)),
+                floatingLabelStyle: GoogleFonts.poppins(
+                  color: Color(0xFF1E6F50),
+                ),
+                hintText: 'Enter your nickname',
+                hintStyle: GoogleFonts.poppins(color: Color(0xFF1E6F50)),
+                filled: true,
+                fillColor: Colors.white,
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 18,
+                  horizontal: 20,
+                ),
+                prefixIcon: const Icon(Icons.wc),
               ),
-              prefixIcon: const Icon(Icons.wc),
+
+              items:
+                  const <String>[
+                    'Male',
+                    'Female',
+                    'Prefer not to say',
+                  ].map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+              onChanged: onGenderChanged,
             ),
-            hint: const Text('Select your gender'),
-            items: const <String>['Male', 'Female', 'Prefer not to say']
-                .map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            onChanged: onGenderChanged,
           ),
         ],
       ),
