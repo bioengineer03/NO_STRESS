@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:no_stress/models/HR.dart';
 import 'package:no_stress/models/Sleep.dart';
 //import 'dart:math' as math;
@@ -47,5 +49,17 @@ class Dati {
       tempoTotaleLetto = duration + minutesToFallAsleep + minutesAfterWakeUp;
       return (tempoTotaleSonno)/(tempoTotaleLetto);
     }
+  }
+
+  //Il metodo _calculateSDNN calcola la SDNN (Standard Deviation of NN intervals), 
+  //un parametro usato comunemente in ambito Heart Rate Variability (HRV) 
+  //per valutare la variabilità della frequenza cardiaca.
+  static double calculateSDNN(List<HR> hrList) {
+    List<double> rrList = hrList.map((hr) => 60000 / hr.value).toList();
+    double mean = rrList.reduce((a, b) => a + b) / rrList.length;
+    double variance =
+        rrList.map((rr) => pow(rr - mean, 2)).reduce((a, b) => a + b) /
+        rrList.length;
+    return sqrt(variance);
   }
 }

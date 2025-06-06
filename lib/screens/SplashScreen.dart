@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:no_stress/screens/HomePage.dart';
 import 'package:no_stress/screens/LoginPage.dart';
-import 'package:no_stress/utils/impact.dart';
+import 'package:no_stress/services/impact.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});

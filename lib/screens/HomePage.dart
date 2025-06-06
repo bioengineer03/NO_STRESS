@@ -2,22 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:circular_progress_stack/circular_progress_stack.dart';
-import 'package:no_stress/screens/AuthorsInfoPage.dart';
-import 'package:no_stress/screens/StressScoreBarChar.dart';
+import 'package:no_stress/widgets/HealthStatCard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:no_stress/providers/data_provider.dart';
 import 'package:no_stress/screens/LoginPage.dart';
 import 'package:no_stress/screens/ProfilePage.dart';
 import 'package:no_stress/screens/DailyCheckInPage.dart';
-import 'package:no_stress/utils/emoji_helper.dart';
+import 'package:no_stress/widgets/emoji_helper.dart';
 import 'package:no_stress/screens/HRVPage.dart';
 import 'package:no_stress/screens/BpmPage.dart';
 import 'package:statistics/statistics.dart';
 import 'package:no_stress/screens/BreathingPage.dart';
-//import 'package:no_stress/screens/MiniGamePage.dart';
 import 'package:no_stress/screens/MemoryGamePage.dart';
-//import 'package:no_stress/screens/StressPage.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -92,12 +89,6 @@ class HomePage extends StatelessWidget {
                 ),
                 //style: TextStyle(fontSize: 16, color: Color(0xFF1E6F50)),
               ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AuthorsInfoPage()),
-                );
-              },
             ),
             ListTile(
               leading: Icon(Icons.air),
@@ -369,6 +360,7 @@ class HomePage extends StatelessWidget {
                     // Mostro la card con l'ultimo valore di HRV
                     return HealthStatCard(
                       title: 'HRV',
+                      // ignore: unnecessary_null_comparison
                       value: meanHRV != null ? '$meanHRV ms' : '--',
                       subtitle: 'Mean value',
                       icon: Icons.monitor_heart,
@@ -384,6 +376,7 @@ class HomePage extends StatelessWidget {
                     );
                   }, // builder
                 ),
+                
                 // INSERISCO LA CARD PER IL TREND DELLA BPM
                 SizedBox(height: 20),
                 Consumer<DataProvider>(
@@ -401,6 +394,7 @@ class HomePage extends StatelessWidget {
                     // Mostro la card con l'ultimo valore di BPM
                     return HealthStatCard(
                       title: 'BPM',
+                      // ignore: unnecessary_null_comparison
                       value: meanBPM != null ? '$meanBPM' : '--',
                       subtitle: 'Mean value',
                       icon: Icons.monitor_heart,
@@ -454,22 +448,6 @@ class HomePage extends StatelessWidget {
           ),
         ),
       ),
-      /*
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Color(0xFF1E6F50),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => DailyCheckInPage()),
-          );
-        },
-        label: Text(
-          'Aggiorna il tuo stress score',
-          style: TextStyle(color: Colors.white), // Scritta bianca
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      */
     );
   } //build
 } //HomePage

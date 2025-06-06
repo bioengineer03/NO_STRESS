@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:math';
+import 'package:no_stress/models/CardModel.dart';
 
 class MemoryGamePage extends StatefulWidget {
   @override
@@ -9,7 +10,7 @@ class MemoryGamePage extends StatefulWidget {
 
 class _MemoryGamePageState extends State<MemoryGamePage> {
   List<String> _emojis = ['🍎', '🍌', '🍇', '🍓', '🍍', '🍑'];
-  List<_CardModel> _cards = [];
+  List<CardModel> _cards = [];
   List<int> _selectedIndices = [];
   bool _isBusy = false;
   int _score = 0;
@@ -24,7 +25,7 @@ class _MemoryGamePageState extends State<MemoryGamePage> {
     _score = 0;
     final List<String> gameEmojis = List.from(_emojis)..addAll(_emojis);
     gameEmojis.shuffle(Random());
-    _cards = gameEmojis.map((e) => _CardModel(content: e)).toList();
+    _cards = gameEmojis.map((e) => CardModel(content: e)).toList();
     setState(() {});
   }
 
@@ -115,14 +116,3 @@ class _MemoryGamePageState extends State<MemoryGamePage> {
   }
 }
 
-class _CardModel {
-  final String content;
-  bool isRevealed;
-  bool isMatched;
-
-  _CardModel({
-    required this.content,
-    this.isRevealed = false,
-    this.isMatched = false,
-  });
-}

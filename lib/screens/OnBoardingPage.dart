@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:no_stress/models/onboarding_content.dart';
-import 'package:no_stress/models/onboarding_page.dart';
-import 'package:no_stress/models/onboard_button.dart';
+import 'package:no_stress/utils/onboarding_page.dart';
+import 'package:no_stress/widgets/onboard_button.dart';
+import 'package:no_stress/utils/last_onboarding_content.dart';
 import 'package:no_stress/screens/HomePage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // Importa la tua home screen
 // import 'package:your_app_name/screens/home_screen.dart';
 
+
 class OnboardingScreen extends StatefulWidget {
-  const OnboardingScreen({Key? key}) : super(key: key);
+  const OnboardingScreen({super.key});
 
   @override
   State<OnboardingScreen> createState() => _OnboardingScreenState();
@@ -17,6 +19,9 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
+  final TextEditingController _nameController = TextEditingController();
+  // Variabile per il sesso selezionato
+  String? _selectedGender;
 
   List<OnboardingContent> onboardingPages = [
     OnboardingContent(
@@ -48,15 +53,29 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     });
   }
 
-  void _onGetStartedPressed() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('seenOnboarding', true);
+  void _navigateToHome() async {
+    final sp = await SharedPreferences.getInstance();
+    await sp.setBool('seenOnboarding', true);
     // Naviga alla tua Home Screen
+    if (_currentPage == onboardingPages.length - 1) {
+      if (_nameController.text.isNotEmpty) {
+        await sp.setString('name', _nameController.text);
+      }
+      if (_selectedGender != null) {
+        await sp.setString('userGender', _selectedGender!);
+      }
+    }
+
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (context) => HomePage(), // Sostituisci con la tua HomeScreen
+        builder: (context) => const HomePage(), 
       ),
     );
+  }
+  @override
+  void dispose() {
+    _nameController.dispose(); // Libera il controller quando il widget viene distrutto
+    super.dispose();
   }
 
   @override
@@ -64,14 +83,45 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     return Scaffold(
       body: Stack(
         children: [
+          // PageView per le schermate scorrevoli
           PageView.builder(
             controller: _pageController,
             itemCount: onboardingPages.length,
             onPageChanged: _onPageChanged,
             itemBuilder: (context, index) {
+              // Se è l'ultima pagina, mostra il widget con gli input
+              if (index == onboardingPages.length - 1) {
+                return LastOnboardingPageContent(
+                  content: onboardingPages[index],
+                  nameController: _nameController,
+                  selectedGender: _selectedGender,
+                  onGenderChanged: (String? newValue) {
+                    setState(() {
+                      _selectedGender = newValue;
+                    });
+                  },
+                );
+              }
+              // Altrimenti, mostra la pagina di onboarding standard
               return OnboardingPage(content: onboardingPages[index]);
             },
           ),
+          // Pulsante "Salta" (Skip) in alto a destra
+          Positioned(
+            top: 40,
+            right: 20,
+            child: TextButton(
+              onPressed: _navigateToHome, // Salta direttamente alla home
+              child: const Text(
+                'Salta',
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+          ),
+          // Controlli in basso (indicatori e pulsante)
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
@@ -79,6 +129,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  // Row per i puntini indicatori
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: List.generate(
@@ -87,14 +138,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     ),
                   ),
                   const SizedBox(height: 30),
+                  // Pulsante "Avanti" o "Inizia"
                   OnboardButton(
                     text: _currentPage == onboardingPages.length - 1
-                        ? 'Start'
-                        : 'Next',
+                        ? 'Start' // Testo per l'ultima pagina
+                        : 'Next', // Testo per le pagine precedenti
                     onPressed: () {
                       if (_currentPage == onboardingPages.length - 1) {
-                        _onGetStartedPressed();
+                        _navigateToHome(); // Se è l'ultima pagina, avvia l'app
                       } else {
+                        // Altrimenti, vai alla pagina successiva
                         _pageController.nextPage(
                           duration: const Duration(milliseconds: 400),
                           curve: Curves.easeIn,
@@ -117,9 +170,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       width: _currentPage == index ? 25 : 10,
       margin: const EdgeInsets.only(right: 5),
       decoration: BoxDecoration(
-        color: _currentPage == index ? Theme.of(context).primaryColor : Colors.grey,
+        color: _currentPage == index ? Color(0xFF1E6F50) : Colors.grey,
         borderRadius: BorderRadius.circular(20),
       ),
     );
   }
+  
 }

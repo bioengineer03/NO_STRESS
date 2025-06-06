@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 //import 'package:no_stress/screens/OnBoarding.dart';
 import 'package:no_stress/screens/HomePage.dart';
 import 'package:no_stress/screens/OnBoardingPage.dart';
-import 'package:no_stress/utils/impact.dart';
+import 'package:no_stress/services/impact.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_fonts/google_fonts.dart'; // Importa google_fonts
 

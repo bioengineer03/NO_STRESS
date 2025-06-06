@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'dart:math';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:no_stress/screens/HomePage.dart'; // Importa la tua HomePage
 
 class BreathingPage extends StatefulWidget {
   @override
@@ -11,13 +13,17 @@ class _BreathingPageState extends State<BreathingPage>
   late AnimationController _controller;
   late Animation<double> _animation;
   bool isInhale = true;
+  bool isRunning = true;
+  Timer? _totalTimer;
+  int _remainingTime = 20;
 
   @override
   void initState() {
     super.initState();
+
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 4),
+      duration: const Duration(seconds: 4),
     )..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
           setState(() => isInhale = false);
@@ -28,35 +34,82 @@ class _BreathingPageState extends State<BreathingPage>
         }
       });
 
-    _animation = Tween<double>(begin: 100, end: 200).animate(CurvedAnimation(
+    _animation = Tween<double>(begin: 100, end: 250).animate(CurvedAnimation(
       parent: _controller,
       curve: Curves.easeInOut,
     ));
 
+    _startSession();
     _controller.forward();
+  }
+
+  void _startSession() {
+    _totalTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        _remainingTime--;
+      });
+
+      if (_remainingTime == 0) {
+        _stopBreathing();
+        _goToHomePage();
+      }
+    });
+  }
+
+  void _stopBreathing() {
+    _controller.stop();
+    _totalTimer?.cancel();
+    setState(() {
+      isRunning = false;
+    });
+  }
+
+  void _toggleBreathing() {
+    setState(() {
+      isRunning = !isRunning;
+    });
+
+    if (isRunning) {
+      _controller.forward();
+      _startSession();
+    } else {
+      _controller.stop();
+      _totalTimer?.cancel();
+    }
+  }
+
+  void _goToHomePage() {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => HomePage()),
+    );
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _totalTimer?.cancel();
     super.dispose();
   }
 
-  String get breathingText => isInhale ? 'Inspira' : 'Espira';
-
   @override
   Widget build(BuildContext context) {
+    final Color inhaleColor = Color(0xFF1E6F50);
+    final Color exhaleColor = Color.fromARGB(255, 24, 151, 102);
+
     return Scaffold(
-      appBar: AppBar(title: Text('Respirazione Guidata')),
+      backgroundColor: Colors.white,
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              breathingText,
-              style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 30),
+              isInhale ? 'Inspira' : 'Espira',
+              style: GoogleFonts.poppins(
+                  fontSize: 40,
+                  color: isInhale ? inhaleColor : exhaleColor,
+                ),
+              ),
+            const SizedBox(height: 30),
             AnimatedBuilder(
               animation: _animation,
               builder: (context, child) {
@@ -69,6 +122,33 @@ class _BreathingPageState extends State<BreathingPage>
                   ),
                 );
               },
+            ),
+            const SizedBox(height: 40),
+            Text(
+              'Tempo rimasto: $_remainingTime s',
+              style: GoogleFonts.poppins(
+                  fontSize: 18,
+                  color: Colors.black,
+                ),
+            ),
+            const SizedBox(height: 40),
+            ElevatedButton.icon(
+              onPressed: isRunning ? _toggleBreathing : null,
+              icon: const Icon(Icons.pause),
+              label: Text(
+                'Ferma',
+                style: GoogleFonts.poppins(
+                  fontSize: 18,
+                  color: Colors.white,
+                ),
+                ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF1E6F50),
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+              ),
             ),
           ],
         ),

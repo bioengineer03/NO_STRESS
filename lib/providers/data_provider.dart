@@ -1,10 +1,11 @@
 //import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:no_stress/models/BPM.dart';
 import 'package:no_stress/models/HR.dart';
 import 'package:no_stress/models/Sleep.dart';
-import 'package:no_stress/utils/impact.dart';
+import 'package:no_stress/models/HRV.dart';
+import 'package:no_stress/services/impact.dart';
 import 'package:no_stress/utils/dati.dart';
-import 'dart:math';
 
 class DataProvider extends ChangeNotifier {
   // Variabili di stato
@@ -171,21 +172,12 @@ class DataProvider extends ChangeNotifier {
               .toList();
 
       if (windowHRs.length >= 2) {
-        double hrv = _calculateSDNN(windowHRs);
+        double hrv = Dati.calculateSDNN(windowHRs);
         hrvTrend.add({'time': start, 'hrv': hrv});
       }
       start = windowEnd;
     }
     return hrvTrend;
-  }
-
-  double _calculateSDNN(List<HR> hrList) {
-    List<double> rrList = hrList.map((hr) => 60000 / hr.value).toList();
-    double mean = rrList.reduce((a, b) => a + b) / rrList.length;
-    double variance =
-        rrList.map((rr) => pow(rr - mean, 2)).reduce((a, b) => a + b) /
-        rrList.length;
-    return sqrt(variance);
   }
 
   List<Map<String, dynamic>> _getBpmTrend(
@@ -225,16 +217,3 @@ class DataProvider extends ChangeNotifier {
   }
 }
 
-class HRV {
-  final DateTime time;
-  final double hrv;
-
-  HRV({required this.time, required this.hrv});
-}
-
-class BPM {
-  final DateTime tempo;
-  final double bpm;
-
-  BPM({required this.tempo, required this.bpm});
-}
