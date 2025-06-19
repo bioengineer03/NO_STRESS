@@ -88,7 +88,9 @@ flutter:
     - assets/images/undraw_to-do-list_eoia.png
     - assets/images/undraw_organizing-data_uns9.png
     - assets/images/undraw_engineering-team_13ax.png
-    
+    - assets/images/undraw_female-avatar_7t6k.png
+    - assets/images/undraw_male-avatar_zkzx.png
+    - assets/images/white.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

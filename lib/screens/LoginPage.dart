@@ -160,17 +160,6 @@ class LoginPage extends StatelessWidget {
                           passwordController.text,
                         );
                         if (result == 200) {
-                          // QUESTO PEZZO POSSO EVITARE DI FARLO PERCHE' SENNO' MI SOVRASCRIVE USERNAME E PASSWORD CHE CI SONO GIA'
-                          // Se è riuscito salva le credenziali in shared preferences
-                          /*
-                          final sp = await SharedPreferences.getInstance();
-                          await sp.setString('username', userController.text);
-                          await sp.setString(
-                            'password',
-                            passwordController.text,
-                          );
-                          */
-
                           // Verifica se l'onboarding è stato completato e naviga in base al risultato
                           // Se non è stato completato naviga nella pagina di onboarding
                           final onboardingCompleted = sp.getBool(
@@ -196,7 +185,7 @@ class LoginPage extends StatelessWidget {
                             );
                           }
                           // Se le credenziali sono errate, viene mostrato un messaggio di errore tramite un SnackBar
-                        }else{
+                        } else {
                           // ignore: use_build_context_synchronously
                           ScaffoldMessenger.of(context)
                             ..removeCurrentSnackBar()
@@ -213,7 +202,7 @@ class LoginPage extends StatelessWidget {
                               ),
                             );
                         }
-                      }else{
+                      } else {
                         // Caso in cui fa login con credenziale username sbagliata
                         ScaffoldMessenger.of(context)
                           ..removeCurrentSnackBar()
@@ -230,7 +219,7 @@ class LoginPage extends StatelessWidget {
                             ),
                           );
                       }
-                    }else{
+                    } else {
                       // non ho username salvati in Shared Preferences
                       // (2) PRIMA VOLTA CHE FACCIO LOGIN
                       final result = await impact.authorize(
@@ -244,33 +233,16 @@ class LoginPage extends StatelessWidget {
                         final sp = await SharedPreferences.getInstance();
                         await sp.setString('username', userController.text);
                         await sp.setString('password', passwordController.text);
-
-                        // Verifica se l'onboarding è stato completato e naviga in base al risultato
-                        // Se non è stato completato naviga nella pagina di onboarding
-                        final onboardingCompleted = sp.getBool(
-                          'onboarding_completed',
+                        // Dato che è la prima volta va nell'onboarding
+                        Navigator.pushReplacement(
+                          // ignore: use_build_context_synchronously
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => OnboardingScreen(),
+                          ),
                         );
-                        if (onboardingCompleted == null ||
-                            onboardingCompleted == false) {
-                          Navigator.pushReplacement(
-                            // ignore: use_build_context_synchronously
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => OnboardingScreen(),
-                            ),
-                          );
-                          // Se è stato completato, va direttamente nella HomePage
-                        } else {
-                          Navigator.pushReplacement(
-                            // ignore: use_build_context_synchronously
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const HomePage(),
-                            ),
-                          );
-                        }
-                        // Se le credenziali sono errate, viene mostrato un messaggio di errore tramite un SnackBar
-                      }else{
+                      // Se le credenziali sono errate, viene mostrato un messaggio di errore tramite un SnackBar
+                      } else {
                         // ignore: use_build_context_synchronously
                         ScaffoldMessenger.of(context)
                           ..removeCurrentSnackBar()

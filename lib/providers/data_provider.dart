@@ -27,8 +27,8 @@ class DataProvider extends ChangeNotifier {
   double w3 = 0.20;
   double w4 = 0.30; // peso media BPM
   double w5 = 0.30;
-  int stressscore = 0;
-  int stressscore_temp = 0;
+  double stressscore = 0;
+  String stress_score = "";
   int meanBPM = 0;
 
   final Impact impact = Impact(); // Inizializzo istanza impact
@@ -104,7 +104,7 @@ class DataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  int _calculateStressScore(List<HR> hr, List<Sleep> sleep) {
+  double _calculateStressScore(List<HR> hr, List<Sleep> sleep) {
     // Indica il numero di volte che ha dormito durante il giorno
     // Ovvero corrisponde al numero di oggetti Sleep che abbiamo dentro la lista sleep
     var lengthHR = hr.length;
@@ -115,14 +115,15 @@ class DataProvider extends ChangeNotifier {
       int meanBpm = Dati.meanBpm(hr);
       double efficiency = Dati.getEfficiency(sleep);
       // Normalizza BPM: 40 bpm = 0 (rilassato), 100 bpm = 1 (stress alto)
-      double bpmNorm = ((meanBpm - 40) / 60).clamp(0.0, 1.0);
+      double bpmNorm = ((meanBpm - 50) / 60).clamp(0.0, 1.0);
       double inefficiency = (1 - efficiency).clamp(0.0, 1.0);
 
-      double w1 = 0.4;
-      double w2 = 0.6;
+      double w1 = 0.5;
+      double w2 = 0.5;
 
       //return (100*(w1*meanBpm + w2*(1-efficiency))).round().clamp(0,100);
-      return (100 * (w1 * bpmNorm + w2 * inefficiency)).round().clamp(0, 100);
+      stress_score = (100 * (w1 * bpmNorm + w2 * inefficiency)).toStringAsFixed(2);
+      return double.parse(stress_score).clamp(0, 100);
     }
   }
 
@@ -143,7 +144,7 @@ class DataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateStressScore(int change) {
+  void updateStressScore(double change) {
     stressscore = (stressscore + change).clamp(0, 100);
     notifyListeners(); // Notifica i listener (come HomePage) del cambiamento
   }

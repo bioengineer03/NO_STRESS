@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:no_stress/models/onboarding_content.dart';
+import 'package:google_fonts/google_fonts.dart'; // Importa google_fonts
 // import 'package:your_app_name/utils/app_styles.dart'; // Per stili globali
 
 class OnboardingPage extends StatelessWidget {
@@ -22,21 +23,20 @@ class OnboardingPage extends StatelessWidget {
           Text(
             content.title,
             textAlign: TextAlign.center,
-            style: const TextStyle(
+            style: GoogleFonts.poppins(
+              fontWeight: FontWeight.w600,
               fontSize: 28,
-              fontWeight: FontWeight.bold,
               color: Colors.black87,
-              // style: AppStyles.onboardingTitleStyle, // Esempio con stili globali
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 15),
           Text(
             content.description,
             textAlign: TextAlign.center,
-            style: const TextStyle(
+            style: GoogleFonts.poppins(
+              fontWeight: FontWeight.w500,
               fontSize: 16,
-              color: Colors.black54,
-              // style: AppStyles.onboardingDescriptionStyle,
+              color: Colors.black87,
             ),
           ),
         ],

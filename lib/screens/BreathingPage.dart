@@ -15,7 +15,7 @@ class _BreathingPageState extends State<BreathingPage>
   bool isInhale = true;
   bool isRunning = true;
   Timer? _totalTimer;
-  int _remainingTime = 20;
+  int _remainingTime = 30;
 
   @override
   void initState() {
@@ -25,19 +25,19 @@ class _BreathingPageState extends State<BreathingPage>
       vsync: this,
       duration: const Duration(seconds: 4),
     )..addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          setState(() => isInhale = false);
-          _controller.reverse();
-        } else if (status == AnimationStatus.dismissed) {
-          setState(() => isInhale = true);
-          _controller.forward();
-        }
-      });
+      if (status == AnimationStatus.completed) {
+        setState(() => isInhale = false);
+        _controller.reverse();
+      } else if (status == AnimationStatus.dismissed) {
+        setState(() => isInhale = true);
+        _controller.forward();
+      }
+    });
 
-    _animation = Tween<double>(begin: 100, end: 250).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
-    ));
+    _animation = Tween<double>(
+      begin: 100,
+      end: 250,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
     _startSession();
     _controller.forward();
@@ -66,22 +66,24 @@ class _BreathingPageState extends State<BreathingPage>
 
   void _toggleBreathing() {
     setState(() {
-      isRunning = !isRunning;
+      if (isRunning) {
+        // Pausa animazione e timer
+        _controller.stop();
+        _totalTimer?.cancel();
+        isRunning = false;
+      } else {
+        // Riprendi animazione e timer con countdown residuo
+        _controller.forward();
+        _startSession();
+        isRunning = true;
+      }
     });
-
-    if (isRunning) {
-      _controller.forward();
-      _startSession();
-    } else {
-      _controller.stop();
-      _totalTimer?.cancel();
-    }
   }
 
   void _goToHomePage() {
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => HomePage()),
-    );
+    Navigator.of(
+      context,
+    ).pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
   }
 
   @override
@@ -98,6 +100,26 @@ class _BreathingPageState extends State<BreathingPage>
 
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            _stopBreathing(); // ferma animazione e timer prima di uscire
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => HomePage()),
+            );
+          },
+        ),
+        title: Text(
+          'Respirazione Guidata', 
+          style: GoogleFonts.poppins(
+            color:Color(0xFF1E6F50),
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+          )),
+        centerTitle: true,
+      ),
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -105,10 +127,10 @@ class _BreathingPageState extends State<BreathingPage>
             Text(
               isInhale ? 'Inspira' : 'Espira',
               style: GoogleFonts.poppins(
-                  fontSize: 40,
-                  color: isInhale ? inhaleColor : exhaleColor,
-                ),
+                fontSize: 40,
+                color: isInhale ? inhaleColor : exhaleColor,
               ),
+            ),
             const SizedBox(height: 30),
             AnimatedBuilder(
               animation: _animation,
@@ -126,25 +148,22 @@ class _BreathingPageState extends State<BreathingPage>
             const SizedBox(height: 40),
             Text(
               'Tempo rimasto: $_remainingTime s',
-              style: GoogleFonts.poppins(
-                  fontSize: 18,
-                  color: Colors.black,
-                ),
+              style: GoogleFonts.poppins(fontSize: 18, color: Colors.black),
             ),
             const SizedBox(height: 40),
             ElevatedButton.icon(
-              onPressed: isRunning ? _toggleBreathing : null,
-              icon: const Icon(Icons.pause),
+              onPressed: _toggleBreathing,
+              icon: Icon(isRunning ? Icons.pause : Icons.play_arrow),
               label: Text(
-                'Ferma',
-                style: GoogleFonts.poppins(
-                  fontSize: 18,
-                  color: Colors.white,
-                ),
-                ),
+                isRunning ? 'Ferma' : 'Riprendi',
+                style: GoogleFonts.poppins(fontSize: 18, color: Colors.white),
+              ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xFF1E6F50),
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 12,
+                ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),

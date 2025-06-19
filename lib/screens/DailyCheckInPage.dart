@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:no_stress/providers/data_provider.dart'; // Assicurati che il percorso sia corretto
 
@@ -12,11 +13,14 @@ class DailyCheckInPage extends StatefulWidget {
 class _DailyCheckInPageState extends State<DailyCheckInPage> {
   // Mappa delle domande e dei loro valori booleani iniziali
   final Map<String, bool?> _answers = {
-    'Sei andato a camminare oggi?': null,
-    'Hai fatto un riposino?': null,
-    'Hai bevuto abbastanza acqua?': null,
-    'Hai avuto un momento di relax?': null,
-    'Hai dormito bene la notte scorsa?': null,
+    'Hai fatto un powe nap (20-30 minuti) oggi?': null,
+    'Hai praticato esercizio fisico moderato per almeno 30 minuti oggi?': null,
+    'Hai dedicato almeno 5 minuti alla respirazione profonda oggi? --> Usa il simulatore BREATH per 10 volte': null,
+    'Hai avuto interazioni sociali positive (di persona o virtuali) oggi?':
+        null,
+    'Hai consumato caffeina dopo le 17:00 oggi?': null,
+    'Hai bevuto almeno un bicchiere di acqua ogni 2 ore oggi (durante le ore di veglia)?':
+        null,
   };
 
   @override
@@ -29,12 +33,12 @@ class _DailyCheckInPageState extends State<DailyCheckInPage> {
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
-        title: const Text(
+        title: Text(
           'Check-in Quotidiano',
-          style: TextStyle(
-            color: Color(0xFF1E6F50),
+          style: GoogleFonts.poppins(
             fontWeight: FontWeight.bold,
             fontSize: 20,
+            color: Color(0xFF1E6F50),
           ),
         ),
         leading: IconButton(
@@ -49,9 +53,9 @@ class _DailyCheckInPageState extends State<DailyCheckInPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Text(
+            Text(
               'Rispondi alle seguenti domande per aggiornare il tuo stress score:',
-              style: TextStyle(fontSize: 18, color: Colors.black87),
+              style: GoogleFonts.poppins(fontSize: 18, color: Colors.black87),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 20),
@@ -74,9 +78,9 @@ class _DailyCheckInPageState extends State<DailyCheckInPage> {
                         children: [
                           Text(
                             question,
-                            style: const TextStyle(
-                              fontSize: 18,
+                            style: GoogleFonts.poppins(
                               fontWeight: FontWeight.w600,
+                              fontSize: 18,
                               color: Color(0xFF1E6F50),
                             ),
                           ),
@@ -91,14 +95,29 @@ class _DailyCheckInPageState extends State<DailyCheckInPage> {
                                   });
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: answer == true ? Color(0xFF1E6F50) : Colors.grey[300],
-                                  foregroundColor: answer == true ? Colors.white : Colors.black87,
+                                  backgroundColor:
+                                      answer == true
+                                          ? Color(0xFF1E6F50)
+                                          : Colors.grey[300],
+                                  foregroundColor:
+                                      answer == true
+                                          ? Colors.white
+                                          : Colors.black87,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10),
                                   ),
-                                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 30,
+                                    vertical: 12,
+                                  ),
                                 ),
-                                child: const Text('Sì', style: TextStyle(fontSize: 16)),
+                                child: Text(
+                                  'Sì',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 16,
+                                    color: Colors.black87,
+                                  ),
+                                ),
                               ),
                               ElevatedButton(
                                 onPressed: () {
@@ -107,14 +126,29 @@ class _DailyCheckInPageState extends State<DailyCheckInPage> {
                                   });
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: answer == false ? Colors.redAccent : Colors.grey[300],
-                                  foregroundColor: answer == false ? Colors.white : Colors.black87,
+                                  backgroundColor:
+                                      answer == false
+                                          ? Colors.redAccent
+                                          : Colors.grey[300],
+                                  foregroundColor:
+                                      answer == false
+                                          ? Colors.white
+                                          : Colors.black87,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10),
                                   ),
-                                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 30,
+                                    vertical: 12,
+                                  ),
                                 ),
-                                child: const Text('No', style: TextStyle(fontSize: 16)),
+                                child: Text(
+                                  'No',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 16,
+                                    color: Colors.black87,
+                                  ),
+                                ),
                               ),
                             ],
                           ),
@@ -129,12 +163,21 @@ class _DailyCheckInPageState extends State<DailyCheckInPage> {
             ElevatedButton(
               onPressed: () {
                 // Calcola l'impatto sul stress score
-                int stressChange = 0;
+                double stressChange = 0.0;
+
                 _answers.forEach((question, answer) {
-                  if (answer == true) {
-                    stressChange -= 10; // Ogni "Sì" riduce lo stress
-                  } else if (answer == false) {
-                    stressChange += 5; // Ogni "No" aumenta leggermente lo stress
+                  if (question.contains('Hai fatto un powe nap (20-30 minuti) oggi?')) {
+                    stressChange += answer == true ? -1.0 : 0.5;
+                  } else if (question.contains('Hai praticato esercizio fisico moderato per almeno 30 minuti oggi?')) {
+                    stressChange += answer == true ? -2.0 : 1.0;
+                  } else if (question.contains('Hai dedicato almeno 5 minuti alla respirazione profonda oggi? --> Usa il simulatore BREATH per 10 volte')) {
+                    stressChange += answer == true ? -1.5 : 1.0;
+                  } else if (question.contains('Hai avuto interazioni sociali positive (di persona o virtuali) oggi?')) {
+                    stressChange += answer == true ? -1.0 : 1.0;
+                  } else if (question.contains('Hai consumato caffeina dopo le 17:00 oggi?')) {
+                    stressChange += answer == true ? 1.5 : -0.5;
+                  } else if (question.contains('Hai bevuto almeno un bicchiere di acqua ogni 2 ore oggi (durante le ore di veglia)?')) {
+                    stressChange += answer == true ? -1.0 : 0.5;
                   }
                 });
 
@@ -144,23 +187,35 @@ class _DailyCheckInPageState extends State<DailyCheckInPage> {
                 // Mostra un messaggio di conferma e torna alla pagina precedente
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text('Stress score aggiornato! Variazione: $stressChange'),
+                    content: Text(
+                      'Stress score aggiornato! Variazione: $stressChange',
+                      style: GoogleFonts.poppins(
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                    ),
                     backgroundColor: Color(0xFF1E6F50),
                   ),
                 );
                 Navigator.pop(context);
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF1E6F50), // Colore verde come nell'app
+                backgroundColor: Color(
+                  0xFF1E6F50,
+                ), // Colore verde come nell'app
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
                 padding: const EdgeInsets.symmetric(vertical: 15),
               ),
-              child: const Text(
+              child: Text(
                 'Salva Risposte',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: GoogleFonts.poppins(
+                  fontSize: 16,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ],

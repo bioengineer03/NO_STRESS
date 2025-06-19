@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:no_stress/models/onboarding_content.dart';
 import 'package:no_stress/utils/onboarding_page.dart';
 import 'package:no_stress/widgets/onboard_button.dart';
@@ -7,7 +8,6 @@ import 'package:no_stress/screens/HomePage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // Importa la tua home screen
 // import 'package:your_app_name/screens/home_screen.dart';
-
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -19,25 +19,27 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
-  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _user_nameController = TextEditingController();
   // Variabile per il sesso selezionato
   String? _selectedGender;
 
   List<OnboardingContent> onboardingPages = [
     OnboardingContent(
       title: 'Welcome to NoStress',
-      description: 'Your journey to well-being starts here. We help you monitor and understand your stress levels, day by day.',
+      description:
+          'Your journey to well-being starts here. We help you monitor and understand your stress levels, day by day.',
       imagePath: 'assets/images/undraw_yoga_i399.png',
-      
     ),
     OnboardingContent(
       title: 'Track stress, sleep, and heart rate',
-      description: 'NoStress analyzes your sleep and heart rate data to give you a personalized daily stress score.',
+      description:
+          'NoStress analyzes your sleep and heart rate data to give you a personalized daily stress score.',
       imagePath: 'assets/images/undraw_organizing-data_uns9.png',
     ),
     OnboardingContent(
       title: 'Check in with yourself',
-      description: 'Answer a short daily questionnaire. Your stress score adjusts to your emotional state, not just your physiological data.',
+      description:
+          'Answer a short daily questionnaire. Your stress score adjusts to your emotional state, not just your physiological data.',
       imagePath: 'assets/images/undraw_to-do-list_eoia.png',
     ),
     OnboardingContent(
@@ -58,8 +60,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     await sp.setBool('seenOnboarding', true);
     // Naviga alla tua Home Screen
     if (_currentPage == onboardingPages.length - 1) {
-      if (_nameController.text.isNotEmpty) {
-        await sp.setString('name', _nameController.text);
+      if (_user_nameController.text.isNotEmpty) {
+        await sp.setString('user_name', _user_nameController.text);
       }
       if (_selectedGender != null) {
         await sp.setString('userGender', _selectedGender!);
@@ -67,14 +69,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
 
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => const HomePage(), 
-      ),
+      MaterialPageRoute(builder: (context) => const HomePage()),
     );
   }
+
   @override
   void dispose() {
-    _nameController.dispose(); // Libera il controller quando il widget viene distrutto
+    _user_nameController
+        .dispose(); // Libera il controller quando il widget viene distrutto
     super.dispose();
   }
 
@@ -93,7 +95,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               if (index == onboardingPages.length - 1) {
                 return LastOnboardingPageContent(
                   content: onboardingPages[index],
-                  nameController: _nameController,
+                  nameController: _user_nameController,
                   selectedGender: _selectedGender,
                   onGenderChanged: (String? newValue) {
                     setState(() {
@@ -108,15 +110,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           ),
           // Pulsante "Salta" (Skip) in alto a destra
           Positioned(
-            top: 40,
+            top: 20,
             right: 20,
             child: TextButton(
               onPressed: _navigateToHome, // Salta direttamente alla home
-              child: const Text(
+              child: Text(
                 'Salta',
-                style: TextStyle(
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 19,
                   color: Colors.grey,
-                  fontSize: 16,
                 ),
               ),
             ),
@@ -140,9 +143,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   const SizedBox(height: 30),
                   // Pulsante "Avanti" o "Inizia"
                   OnboardButton(
-                    text: _currentPage == onboardingPages.length - 1
-                        ? 'Start' // Testo per l'ultima pagina
-                        : 'Next', // Testo per le pagine precedenti
+                    text:
+                        _currentPage == onboardingPages.length - 1
+                            ? 'Start' // Testo per l'ultima pagina
+                            : 'Next', // Testo per le pagine precedenti
                     onPressed: () {
                       if (_currentPage == onboardingPages.length - 1) {
                         _navigateToHome(); // Se è l'ultima pagina, avvia l'app
@@ -175,5 +179,4 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       ),
     );
   }
-  
 }

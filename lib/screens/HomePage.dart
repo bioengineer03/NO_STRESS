@@ -30,7 +30,7 @@ class HomePage extends StatelessWidget {
         title: Text(
           'No Stress',
           style: GoogleFonts.poppins(
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w500,
             fontSize: 30,
             color: Color(0xFF1E6F50),
           ),
@@ -78,17 +78,6 @@ class HomePage extends StatelessWidget {
                 await sp.remove('access');
                 await sp.remove('refresh');
               },
-            ),
-            ListTile(
-              leading: Icon(Icons.info), // Icona info
-              title: Text(
-                'Authors',
-                style: GoogleFonts.poppins(
-                  fontSize: 16,
-                  color: Color(0xFF1E6F50),
-                ),
-                //style: TextStyle(fontSize: 16, color: Color(0xFF1E6F50)),
-              ),
             ),
             ListTile(
               leading: Icon(Icons.air),
@@ -159,7 +148,7 @@ class HomePage extends StatelessWidget {
                       builder: ((context, snapshot) {
                         if (snapshot.hasData) {
                           final sp = snapshot.data as SharedPreferences;
-                          if (sp.getString('name') == null) {
+                          if (sp.getString('user_name') == null) {
                             return Text(
                               "Hello User",
                               style: GoogleFonts.poppins(
@@ -168,7 +157,7 @@ class HomePage extends StatelessWidget {
                               ),
                             );
                           } else {
-                            final name = sp.getString('name');
+                            final name = sp.getString('user_name');
                             return Text(
                               "Hello $name",
                               style: GoogleFonts.poppins(

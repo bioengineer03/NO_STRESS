@@ -5,7 +5,7 @@ class EmojiHelper {
   static final parser = EmojiParser();
 
   /// Restituisce un widget Text con emoji in base allo score
-  static Widget getEmojiForStressScore(int score) {
+  static Widget getEmojiForStressScore(double score) {
     String emoji;
     if (score < 25) {
       emoji = parser.get('smile').code;  // 😀
