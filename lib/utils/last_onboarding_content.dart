@@ -38,30 +38,18 @@ class LastOnboardingPageContent extends StatelessWidget {
             content.title,
             textAlign: TextAlign.center,
             style: GoogleFonts.poppins(
-              fontWeight: FontWeight.w600,
-              fontSize: 28,
-              color: Colors.black87,
+                color: const Color.fromARGB(255, 16, 18, 17),
+                fontSize: 28,
             ),
           ),
           const SizedBox(height: 16),
           Text(
             content.description,
             textAlign: TextAlign.center,
-<<<<<<< HEAD
             style: GoogleFonts.poppins(
-              fontWeight: FontWeight.w500,
-              fontSize:16,
-              color: Colors.black54,
+                color: const Color.fromARGB(255, 16, 18, 17),
+                fontSize: 16,
             ),
-          ),
-          const SizedBox(height: 20),
-          // Campo di input per il nome
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15),
-            child: TextField(
-              controller: nameController,
-=======
-            style: const TextStyle(fontSize: 16, color: Colors.black54),
           ),
           const SizedBox(height: 40),
           // Campo di input per il nome
@@ -105,48 +93,6 @@ class LastOnboardingPageContent extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 15),
             child: DropdownButtonFormField<String>(
               value: selectedGender,
->>>>>>> 372ad74672c7abc9a7ed53bb211ce3b0386c78b9
-              style: GoogleFonts.poppins(
-                color: const Color.fromARGB(255, 16, 18, 17),
-                fontSize: 16,
-              ),
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                  borderSide: BorderSide(color: Color(0xFF1E6F50), width: 1.7),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                  borderSide: BorderSide(color: Color(0xFF1E6F50), width: 2.0),
-                ),
-<<<<<<< HEAD
-                labelText: 'Nickname',
-=======
-                labelText: 'Gender',
->>>>>>> 372ad74672c7abc9a7ed53bb211ce3b0386c78b9
-                labelStyle: GoogleFonts.poppins(color: const Color(0xFF1E6F50)),
-                floatingLabelStyle: GoogleFonts.poppins(
-                  color: Color(0xFF1E6F50),
-                ),
-                hintText: 'Enter your nickname',
-                hintStyle: GoogleFonts.poppins(color: Color(0xFF1E6F50)),
-                filled: true,
-                fillColor: Colors.white,
-                contentPadding: EdgeInsets.symmetric(
-                  vertical: 18,
-                  horizontal: 20,
-                ),
-<<<<<<< HEAD
-              ),
-            ),
-          ),
-          
-          const SizedBox(height: 10),
-          // Dropdown per il sesso
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15),
-            child: DropdownButtonFormField<String>(
-              value: selectedGender,
               style: GoogleFonts.poppins(
                 color: const Color.fromARGB(255, 16, 18, 17),
                 fontSize: 16,
@@ -189,24 +135,6 @@ class LastOnboardingPageContent extends StatelessWidget {
                   }).toList(),
               onChanged: onGenderChanged,
             ),
-=======
-                prefixIcon: const Icon(Icons.wc),
-              ),
-
-              items:
-                  const <String>[
-                    'Male',
-                    'Female',
-                    'Prefer not to say',
-                  ].map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-              onChanged: onGenderChanged,
-            ),
->>>>>>> 372ad74672c7abc9a7ed53bb211ce3b0386c78b9
           ),
         ],
       ),
