@@ -40,7 +40,7 @@ class _MiniGamePageState extends State<MiniGamePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Gioco Relax')),
+      appBar: AppBar(title: Text('Relax Game')),
       body: Stack(
         children: [
           Positioned(
@@ -52,7 +52,7 @@ class _MiniGamePageState extends State<MiniGamePage> {
               children: [
                 Center(
                 child: Text(
-                  'Punteggio: $score',
+                  'Score: $score',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 ),

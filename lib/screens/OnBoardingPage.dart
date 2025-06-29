@@ -115,7 +115,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             child: TextButton(
               onPressed: _navigateToHome, // Salta direttamente alla home
               child: Text(
-                'Salta',
+                'Skip',
                 style: GoogleFonts.poppins(
                   fontWeight: FontWeight.w500,
                   fontSize: 19,

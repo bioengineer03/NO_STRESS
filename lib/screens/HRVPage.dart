@@ -27,7 +27,7 @@ class HRVPage extends StatelessWidget {
                 child: HRVChart(data: hrvData),
               ),
               SizedBox(height: 20),
-              Text('Valore medio di HRV: $meanHRV (ms)\nDati calcolati ogni 20 minuti',
+              Text('Average HRV: $meanHRV (ms)\nData calculated every 20 minutes',
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                 fontSize: 16,

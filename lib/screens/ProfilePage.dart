@@ -92,7 +92,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Dati salvati con successo!'),
+          content: Text('Data successfully saved!'),
           backgroundColor: _mainColor,
         ),
       );

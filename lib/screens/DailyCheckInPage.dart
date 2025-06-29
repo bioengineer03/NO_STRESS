@@ -13,13 +13,13 @@ class DailyCheckInPage extends StatefulWidget {
 class _DailyCheckInPageState extends State<DailyCheckInPage> {
   // Mappa delle domande e dei loro valori booleani iniziali
   final Map<String, bool?> _answers = {
-    'Hai fatto un powe nap (20-30 minuti) oggi?': null,
-    'Hai praticato esercizio fisico moderato per almeno 30 minuti oggi?': null,
-    'Hai dedicato almeno 5 minuti alla respirazione profonda oggi? --> Usa il simulatore BREATH per 10 volte': null,
-    'Hai avuto interazioni sociali positive (di persona o virtuali) oggi?':
+    'Did you take a power nap (20–30 minutes) today?': null,
+    'Did you get at least 30 minutes of moderate exercise today?': null,
+    'Did you spend at least 5 minutes on deep breathing today? → Use the BREATH simulator 10 times.': null,
+    'Did you have any positive social interactions (in person or virtual) today?':
         null,
-    'Hai consumato caffeina dopo le 17:00 oggi?': null,
-    'Hai bevuto almeno un bicchiere di acqua ogni 2 ore oggi (durante le ore di veglia)?':
+    'Did you consume caffeine after 5:00 PM today?': null,
+    'Did you drink at least one glass of water every 2 hours while you were awake today?':
         null,
   };
 
@@ -34,7 +34,7 @@ class _DailyCheckInPageState extends State<DailyCheckInPage> {
         centerTitle: true,
         elevation: 0,
         title: Text(
-          'Check-in Quotidiano',
+          'Daily Check-in',
           style: GoogleFonts.poppins(
             fontWeight: FontWeight.bold,
             fontSize: 20,
@@ -54,7 +54,7 @@ class _DailyCheckInPageState extends State<DailyCheckInPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              'Rispondi alle seguenti domande per aggiornare il tuo stress score:',
+              'Just answer a few questions to refresh your stress score:',
               style: GoogleFonts.poppins(fontSize: 18, color: Colors.black87),
               textAlign: TextAlign.center,
             ),
@@ -112,7 +112,7 @@ class _DailyCheckInPageState extends State<DailyCheckInPage> {
                                   ),
                                 ),
                                 child: Text(
-                                  'Sì',
+                                  'Yes',
                                   style: GoogleFonts.poppins(
                                     fontSize: 16,
                                     color: Colors.black87,
@@ -166,17 +166,17 @@ class _DailyCheckInPageState extends State<DailyCheckInPage> {
                 double stressChange = 0.0;
 
                 _answers.forEach((question, answer) {
-                  if (question.contains('Hai fatto un powe nap (20-30 minuti) oggi?')) {
+                  if (question.contains('Did you take a power nap (20–30 minutes) today?')) {
                     stressChange += answer == true ? -1.0 : 0.5;
-                  } else if (question.contains('Hai praticato esercizio fisico moderato per almeno 30 minuti oggi?')) {
+                  } else if (question.contains('Did you get at least 30 minutes of moderate exercise today?')) {
                     stressChange += answer == true ? -2.0 : 1.0;
-                  } else if (question.contains('Hai dedicato almeno 5 minuti alla respirazione profonda oggi? --> Usa il simulatore BREATH per 10 volte')) {
+                  } else if (question.contains('Did you spend at least 5 minutes on deep breathing today? → Use the BREATH simulator 10 times.')) {
                     stressChange += answer == true ? -1.5 : 1.0;
-                  } else if (question.contains('Hai avuto interazioni sociali positive (di persona o virtuali) oggi?')) {
+                  } else if (question.contains('Did you have any positive social interactions (in person or virtual) today?')) {
                     stressChange += answer == true ? -1.0 : 1.0;
-                  } else if (question.contains('Hai consumato caffeina dopo le 17:00 oggi?')) {
+                  } else if (question.contains('Did you consume caffeine after 5:00 PM today?')) {
                     stressChange += answer == true ? 1.5 : -0.5;
-                  } else if (question.contains('Hai bevuto almeno un bicchiere di acqua ogni 2 ore oggi (durante le ore di veglia)?')) {
+                  } else if (question.contains('Did you drink at least one glass of water every 2 hours while you were awake today?')) {
                     stressChange += answer == true ? -1.0 : 0.5;
                   }
                 });
@@ -188,7 +188,7 @@ class _DailyCheckInPageState extends State<DailyCheckInPage> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      'Stress score aggiornato! Variazione: $stressChange',
+                      'Updated stress score! Here’s the change:: $stressChange',
                       style: GoogleFonts.poppins(
                         fontSize: 16,
                         color: Colors.white,
@@ -210,7 +210,7 @@ class _DailyCheckInPageState extends State<DailyCheckInPage> {
                 padding: const EdgeInsets.symmetric(vertical: 15),
               ),
               child: Text(
-                'Salva Risposte',
+                'Save my answers',
                 style: GoogleFonts.poppins(
                   fontSize: 16,
                   color: Colors.white,

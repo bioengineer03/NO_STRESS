@@ -218,7 +218,7 @@ class HomePage extends StatelessWidget {
                               padding: const EdgeInsets.all(16.0),
                               child: Center(
                                 child: Text(
-                                  "I dati di questa giornata non sono disponibili",
+                                  "We're sorry, data for this day is not unavailable",
                                   textAlign: TextAlign.center,
                                   style: GoogleFonts.poppins(
                                     fontSize: 16,
@@ -258,7 +258,7 @@ class HomePage extends StatelessWidget {
                                       ),
                                       const SizedBox(height: 15),
                                       Text(
-                                        'Il tuo STRESS SCORE: ${provider.stressscore}',
+                                        'Your STRESS SCORE: ${provider.stressscore}',
                                         style: GoogleFonts.poppins(
                                           fontSize: 16,
                                           color: Colors.black,
@@ -266,11 +266,11 @@ class HomePage extends StatelessWidget {
                                       ),
                                       Text(
                                         provider.stressscore < 25
-                                            ? "Wow, come sei tranquillo!"
+                                            ? "You're in balance. Stay with it!"
                                             : provider.stressscore > 25 &&
                                                 provider.stressscore < 75
-                                            ? "Comincia a rilassarti!"
-                                            : "Troppa ansia, affrontiamola insieme",
+                                            ? "A short break might be all you need"
+                                            : "Feeling tense? Let’s breathe and reset together.",
                                         style: GoogleFonts.poppins(
                                           fontSize: 20,
                                           color: Colors.black,
@@ -300,7 +300,7 @@ class HomePage extends StatelessWidget {
                                                 color: Colors.white,
                                               ),
                                               label: Text(
-                                                'Aggiorna il tuo stress score',
+                                                'Update your stress score',
                                                 style: GoogleFonts.poppins(
                                                   fontSize: 16,
                                                   color: Colors.white,
