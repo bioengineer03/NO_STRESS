@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-//import 'package:no_stress/screens/OnBoarding.dart';
 import 'package:no_stress/screens/HomePage.dart';
-import 'package:no_stress/screens/OnBoardingPage.dart';
 import 'package:no_stress/services/impact.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:google_fonts/google_fonts.dart'; // Importa google_fonts
+import 'package:google_fonts/google_fonts.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
-
-  // Variabili
+  // Variabili per i controller dei campi di testo e per la visibilità della password
   // Inizializzo text controllers per verificare username e password inseriti
   final TextEditingController userController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -20,18 +17,14 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
-      // Si può usare se vogliamo fare vedere solo la scritta NoStress
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 24.0,
-          ), // margini laterali per tutta la pagina
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Image.asset('assets/images/logo.png', scale: 7),
               const SizedBox(height: 20),
-              // Logo
               Text(
                 'Welcome',
                 style: GoogleFonts.poppins(
@@ -41,6 +34,8 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 32),
+
+              // Campo di testo per l'inserimento dello username
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 15),
                 child: TextField(
@@ -82,6 +77,8 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
               ),
+
+              // Campo di testo per l'inserimento della password
               Padding(
                 padding: const EdgeInsets.only(
                   left: 15.0,
@@ -142,6 +139,8 @@ class LoginPage extends StatelessWidget {
                   },
                 ),
               ),
+
+              // Pulsante di login
               Container(
                 height: 50,
                 width: 250,
@@ -151,114 +150,40 @@ class LoginPage extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () async {
                     final sp = await SharedPreferences.getInstance();
-                    // (1) CASO IN CUI STO FACENDO LOGIN DOPO LOGOUT
-                    if (sp.getString('username') != null) {
-                      if (userController.text == sp.getString('username')) {
-                        // Caso in cui fa login con credenziale username giusta
-                        final result = await impact.authorize(
-                          userController.text,
-                          passwordController.text,
-                        );
-                        if (result == 200) {
-                          // Verifica se l'onboarding è stato completato e naviga in base al risultato
-                          // Se non è stato completato naviga nella pagina di onboarding
-                          final onboardingCompleted = sp.getBool(
-                            'onboarding_completed',
-                          );
-                          if (onboardingCompleted == null ||
-                              onboardingCompleted == false) {
-                            Navigator.pushReplacement(
-                              // ignore: use_build_context_synchronously
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => OnboardingScreen(),
-                              ),
-                            );
-                            // Se è stato completato, va direttamente nella HomePage
-                          } else {
-                            Navigator.pushReplacement(
-                              // ignore: use_build_context_synchronously
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const HomePage(),
-                              ),
-                            );
-                          }
-                          // Se le credenziali sono errate, viene mostrato un messaggio di errore tramite un SnackBar
-                        } else {
-                          // ignore: use_build_context_synchronously
-                          ScaffoldMessenger.of(context)
-                            ..removeCurrentSnackBar()
-                            ..showSnackBar(
-                              SnackBar(
-                                backgroundColor: Colors.red,
-                                behavior: SnackBarBehavior.floating,
-                                margin: EdgeInsets.all(8),
-                                duration: Duration(seconds: 2),
-                                content: Text(
-                                  'Password incorrect',
-                                  style: TextStyle(fontFamily: 'Poppins'),
-                                ),
-                              ),
-                            );
-                        }
-                      } else {
-                        // Caso in cui fa login con credenziale username sbagliata
-                        ScaffoldMessenger.of(context)
-                          ..removeCurrentSnackBar()
-                          ..showSnackBar(
-                            SnackBar(
-                              backgroundColor: Colors.red,
-                              behavior: SnackBarBehavior.floating,
-                              margin: EdgeInsets.all(8),
-                              duration: Duration(seconds: 2),
-                              content: Text(
-                                'Username incorrect',
-                                style: TextStyle(fontFamily: 'Poppins'),
-                              ),
-                            ),
-                          );
-                      }
-                    } else {
-                      // non ho username salvati in Shared Preferences
-                      // (2) PRIMA VOLTA CHE FACCIO LOGIN
-                      final result = await impact.authorize(
-                        userController.text,
-                        passwordController.text,
+                    final result = await impact.authorize(
+                      userController.text,
+                      passwordController.text,
+                    );
+                    // Verifica il risultato dell'autentificazione
+                    if (result == 200) {
+                      // In caso di login riuscito, salva le credenziali e naviga alla HomePage
+                      await sp.setString('username', userController.text);
+                      await sp.setString('password', passwordController.text);
+
+                      Navigator.pushReplacement(
+                        
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const HomePage(),
+                        ),
                       );
-                      // If correct, store the username and password in SharedPreferences
-                      // and navigate to the Exposure screen (pushReplacement to remove the login screen from the stack)
-                      if (result == 200) {
-                        // Sen è riuscito salva le credenziali in shared preferences
-                        final sp = await SharedPreferences.getInstance();
-                        await sp.setString('username', userController.text);
-                        await sp.setString('password', passwordController.text);
-                        // Dato che è la prima volta va nell'onboarding
-                        Navigator.pushReplacement(
-                          // ignore: use_build_context_synchronously
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => OnboardingScreen(),
+                    } else {
+                      // Mostra messaggio di errore per credenziali errate
+                      
+                      ScaffoldMessenger.of(context)
+                        ..removeCurrentSnackBar()
+                        ..showSnackBar(
+                          SnackBar(
+                            backgroundColor: Colors.red,
+                            behavior: SnackBarBehavior.floating,
+                            margin: EdgeInsets.all(8),
+                            duration: Duration(seconds: 2),
+                            content: Text(
+                              'Username or Password incorrect',
+                              style: TextStyle(fontFamily: 'Poppins'),
+                            ),
                           ),
                         );
-                      // Se le credenziali sono errate, viene mostrato un messaggio di errore tramite un SnackBar
-                      } else {
-                        // ignore: use_build_context_synchronously
-                        ScaffoldMessenger.of(context)
-                          ..removeCurrentSnackBar()
-                          ..showSnackBar(
-                            SnackBar(
-                              backgroundColor: Colors.red,
-                              behavior: SnackBarBehavior.floating,
-                              margin: EdgeInsets.all(8),
-                              duration: Duration(seconds: 2),
-                              content: Text(
-                                'Username or Password incorrect',
-                                style: TextStyle(fontFamily: 'Poppins'),
-                              ),
-                            ),
-                          );
-                      }
                     }
                   },
                   style: ElevatedButton.styleFrom(

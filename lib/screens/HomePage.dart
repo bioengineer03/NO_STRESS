@@ -30,9 +30,9 @@ class HomePage extends StatelessWidget {
         title: Text(
           'No Stress',
           style: GoogleFonts.poppins(
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.bold,
             fontSize: 30,
-            color: Color(0xFF1E6F50),
+            color: const Color(0xFF1E6F50),
           ),
         ),
       ),
@@ -153,6 +153,7 @@ class HomePage extends StatelessWidget {
                               "Hello User",
                               style: GoogleFonts.poppins(
                                 fontSize: 20,
+                                fontWeight: FontWeight.bold,
                                 color: Color(0xFF1E6F50),
                               ),
                             );
@@ -162,6 +163,7 @@ class HomePage extends StatelessWidget {
                               "Hello $name",
                               style: GoogleFonts.poppins(
                                 fontSize: 20,
+                                fontWeight: FontWeight.bold,
                                 color: Color(0xFF1E6F50),
                               ),
                             );

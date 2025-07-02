@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:math';
 import 'package:no_stress/models/CardModel.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 
 class MemoryGamePage extends StatefulWidget {
   @override
@@ -63,8 +65,15 @@ class _MemoryGamePageState extends State<MemoryGamePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Memory Game'),
-        backgroundColor: Color(0xFF1E6F50),
+        title: Text(
+          'Memory Game',
+          style: GoogleFonts.poppins(
+            fontWeight: FontWeight.bold,
+            fontSize: 25,
+            color: const Color(0xFF1E6F50),
+          ),
+        ),
+        centerTitle: true,
         actions: [
           IconButton(
             icon: Icon(Icons.refresh),

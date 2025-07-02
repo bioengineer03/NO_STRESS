@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:no_stress/models/onboarding_content.dart';
+import 'package:no_stress/screens/LoginPage.dart';
 import 'package:no_stress/utils/onboarding_page.dart';
 import 'package:no_stress/widgets/onboard_button.dart';
 import 'package:no_stress/utils/last_onboarding_content.dart';
-import 'package:no_stress/screens/HomePage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// Importa la tua home screen
-// import 'package:your_app_name/screens/home_screen.dart';
+
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -55,9 +54,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     });
   }
 
-  void _navigateToHome() async {
+  void _navigateToLogin() async {
     final sp = await SharedPreferences.getInstance();
-    await sp.setBool('seenOnboarding', true);
+    await sp.setBool('onboarding_completed', true);
     // Naviga alla tua Home Screen
     if (_currentPage == onboardingPages.length - 1) {
       if (_user_nameController.text.isNotEmpty) {
@@ -69,7 +68,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
 
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => const HomePage()),
+      MaterialPageRoute(builder: (context) => LoginPage()),
     );
   }
 
@@ -113,7 +112,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             top: 20,
             right: 20,
             child: TextButton(
-              onPressed: _navigateToHome, // Salta direttamente alla home
+              onPressed: _navigateToLogin, // Salta direttamente alla home
               child: Text(
                 'Skip',
                 style: GoogleFonts.poppins(
@@ -149,7 +148,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             : 'Next', // Testo per le pagine precedenti
                     onPressed: () {
                       if (_currentPage == onboardingPages.length - 1) {
-                        _navigateToHome(); // Se è l'ultima pagina, avvia l'app
+                        _navigateToLogin(); // Se è l'ultima pagina, avvia l'app
                       } else {
                         // Altrimenti, vai alla pagina successiva
                         _pageController.nextPage(

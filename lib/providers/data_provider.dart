@@ -12,8 +12,7 @@ class DataProvider extends ChangeNotifier {
   DateTime currentDate = DateTime.now();
   List<HR> heartRates = []; // lista dati HR
   List<Sleep> sleep = []; // lista dati sleep
-  List<Map<String, dynamic>> hrvTrend =
-      []; // lista di mappe con i dati HRV-time
+  List<Map<String, dynamic>> hrvTrend = []; // lista di mappe con i dati HRV-time
   List<HRV> hrvList = []; // Lista degli HRV per il plot
   List<Map<String, dynamic>> bpmTrend = []; // Mappe per BPM time
   List<BPM> bpmList = []; // Lista degli BPM per il plot
