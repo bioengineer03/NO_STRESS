@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:no_stress/providers/data_provider.dart'; // Assicurati che il percorso sia corretto
+import 'package:no_stress/providers/data_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DailyCheckInPage extends StatefulWidget {
   const DailyCheckInPage({super.key});
@@ -15,13 +17,20 @@ class _DailyCheckInPageState extends State<DailyCheckInPage> {
   final Map<String, bool?> _answers = {
     'Did you take a power nap (20–30 minutes) today?': null,
     'Did you get at least 30 minutes of moderate exercise today?': null,
-    'Did you spend at least 5 minutes on deep breathing today? → Use the BREATH simulator 10 times.': null,
+    'Did you spend at least 5 minutes on deep breathing today? → Use the BREATH simulator 10 times.':
+        null,
     'Did you have any positive social interactions (in person or virtual) today?':
         null,
     'Did you consume caffeine after 5:00 PM today?': null,
     'Did you drink at least one glass of water every 2 hours while you were awake today?':
         null,
   };
+
+  Future<void> _setDailyCheckInCompleted(DateTime currentDate) async {
+    final sp = await SharedPreferences.getInstance();
+    final dateKey = DateFormat('yyyy-MM-dd').format(currentDate);
+    await sp.setBool('dailycheckin_completed_$dateKey', true);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -161,22 +170,50 @@ class _DailyCheckInPageState extends State<DailyCheckInPage> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
+                // Verifica se tutte le domande hanno una risposta
+                if (_answers.values.any((value) => value == null)) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'Please answer all questions before continuing.',
+                        style: GoogleFonts.poppins(
+                          fontSize: 16,
+                          color: Colors.white,
+                        ),
+                      ),
+                      backgroundColor: Colors.redAccent,
+                    ),
+                  );
+                  return; // Esce senza salvare
+                }
                 // Calcola l'impatto sul stress score
                 double stressChange = 0.0;
 
                 _answers.forEach((question, answer) {
-                  if (question.contains('Did you take a power nap (20–30 minutes) today?')) {
+                  if (question.contains(
+                    'Did you take a power nap (20–30 minutes) today?',
+                  )) {
                     stressChange += answer == true ? -1.0 : 0.5;
-                  } else if (question.contains('Did you get at least 30 minutes of moderate exercise today?')) {
+                  } else if (question.contains(
+                    'Did you get at least 30 minutes of moderate exercise today?',
+                  )) {
                     stressChange += answer == true ? -2.0 : 1.0;
-                  } else if (question.contains('Did you spend at least 5 minutes on deep breathing today? → Use the BREATH simulator 10 times.')) {
+                  } else if (question.contains(
+                    'Did you spend at least 5 minutes on deep breathing today? → Use the BREATH simulator 10 times.',
+                  )) {
                     stressChange += answer == true ? -1.5 : 1.0;
-                  } else if (question.contains('Did you have any positive social interactions (in person or virtual) today?')) {
+                  } else if (question.contains(
+                    'Did you have any positive social interactions (in person or virtual) today?',
+                  )) {
                     stressChange += answer == true ? -1.0 : 1.0;
-                  } else if (question.contains('Did you consume caffeine after 5:00 PM today?')) {
+                  } else if (question.contains(
+                    'Did you consume caffeine after 5:00 PM today?',
+                  )) {
                     stressChange += answer == true ? 1.5 : -0.5;
-                  } else if (question.contains('Did you drink at least one glass of water every 2 hours while you were awake today?')) {
+                  } else if (question.contains(
+                    'Did you drink at least one glass of water every 2 hours while you were awake today?',
+                  )) {
                     stressChange += answer == true ? -1.0 : 0.5;
                   }
                 });
@@ -184,11 +221,13 @@ class _DailyCheckInPageState extends State<DailyCheckInPage> {
                 // Aggiorna lo stress score tramite il DataProvider
                 dataProvider.updateStressScore(stressChange);
 
+                await _setDailyCheckInCompleted(dataProvider.currentDate);
+
                 // Mostra un messaggio di conferma e torna alla pagina precedente
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      'Updated stress score! Here’s the change:: $stressChange',
+                      'Updated stress score! Here’s the change: $stressChange',
                       style: GoogleFonts.poppins(
                         fontSize: 16,
                         color: Colors.white,

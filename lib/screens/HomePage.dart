@@ -287,16 +287,124 @@ class HomePage extends StatelessWidget {
                                           ),
                                           child: Center(
                                             child: ElevatedButton.icon(
-                                              onPressed: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder:
-                                                        (context) =>
-                                                            DailyCheckInPage(),
-                                                  ),
+                                              onPressed: () async {
+                                                final today = DateTime.now();
+                                                final selectedDate =
+                                                    provider.currentDate;
+
+                                                // Calcoliamo la data di ieri (solo anno-mese-giorno per sicurezza)
+                                                final yesterday = DateTime(
+                                                  today.year,
+                                                  today.month,
+                                                  today.day,
+                                                ).subtract(Duration(days: 1));
+                                                final selected = DateTime(
+                                                  selectedDate.year,
+                                                  selectedDate.month,
+                                                  selectedDate.day,
                                                 );
+
+                                                if (selected != yesterday) {
+                                                  ScaffoldMessenger.of(
+                                                    context,
+                                                  ).showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        'It is too late to fill out the questionnaire for this data',
+                                                        style:
+                                                            GoogleFonts.poppins(
+                                                              fontSize: 16,
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                      ),
+                                                      backgroundColor: Colors.redAccent
+                                                    ),
+                                                  );
+                                                  return;
+                                                }
+
+                                                final sp =
+                                                    await SharedPreferences.getInstance();
+                                                final dateKey = DateFormat(
+                                                  'yyyy-MM-dd',
+                                                ).format(selectedDate);
+                                                final daily_completed =
+                                                    sp.getBool(
+                                                      'dailycheckin_completed_$dateKey',
+                                                    ) ??
+                                                    false;
+
+                                                if (daily_completed) {
+                                                  ScaffoldMessenger.of(
+                                                    context,
+                                                  ).showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        'You have already completed your daily check-in for this date!',
+                                                        style:
+                                                            GoogleFonts.poppins(
+                                                              fontSize: 16,
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                      ),
+                                                      backgroundColor: Colors.redAccent
+                                                    ),
+                                                  );
+                                                } else {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder:
+                                                          (context) =>
+                                                              DailyCheckInPage(),
+                                                    ),
+                                                  );
+                                                }
                                               },
+
+                                              /*
+                                              onPressed: () async {
+                                                final sp =
+                                                    await SharedPreferences.getInstance();
+                                                final dateKey = DateFormat('yyyy-MM-dd').format(provider.currentDate);
+                                                final daily_completed =
+                                                    sp.getBool(
+                                                      'dailycheckin_completed_$dateKey',
+                                                    ) ??
+                                                    false;
+                                                if (daily_completed) {
+                                                  ScaffoldMessenger.of(
+                                                    context,
+                                                  ).showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        'You have already completed the daily check-in today!',
+                                                        style:
+                                                            GoogleFonts.poppins(
+                                                              fontSize: 16,
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                      ),
+                                                      backgroundColor: Color(
+                                                        0xFF1E6F50,
+                                                      ),
+                                                    ),
+                                                  );
+                                                } else {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder:
+                                                          (context) =>
+                                                              DailyCheckInPage(),
+                                                    ),
+                                                  );
+                                                }
+                                              },
+                                              */
                                               icon: Icon(
                                                 Icons.edit_note,
                                                 color: Colors.white,
@@ -367,7 +475,7 @@ class HomePage extends StatelessWidget {
                     );
                   }, // builder
                 ),
-                
+
                 // INSERISCO LA CARD PER IL TREND DELLA BPM
                 SizedBox(height: 20),
                 Consumer<DataProvider>(

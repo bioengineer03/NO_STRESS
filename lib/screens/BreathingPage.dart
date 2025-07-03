@@ -89,7 +89,7 @@ class _BreathingPageState extends State<BreathingPage>
   void _goToHomePage() {
     // Assicurati che _totalTimer sia annullato prima di navigare via
     _totalTimer?.cancel();
-    _controller.dispose(); // Libera anche il controller
+    //_controller.dispose(); // Libera anche il controller
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (context) => HomePage()),
     );

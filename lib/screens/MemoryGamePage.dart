@@ -4,14 +4,13 @@ import 'dart:math';
 import 'package:no_stress/models/CardModel.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-
 class MemoryGamePage extends StatefulWidget {
   @override
   _MemoryGamePageState createState() => _MemoryGamePageState();
 }
 
 class _MemoryGamePageState extends State<MemoryGamePage> {
-  List<String> _emojis = ['🍎', '🍌', '🍇', '🍓', '🍍', '🍑'];
+  List<String> _emojis = ['🍎', '🍌', '🍓', '🍍', '🍑', '🥑', '🍕', '🫐'];
   List<CardModel> _cards = [];
   List<int> _selectedIndices = [];
   bool _isBusy = false;
@@ -74,18 +73,16 @@ class _MemoryGamePageState extends State<MemoryGamePage> {
           ),
         ),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.refresh),
-            onPressed: _startGame,
-          ),
-        ],
+        actions: [IconButton(icon: Icon(Icons.refresh), onPressed: _startGame)],
       ),
       body: Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Text('Score: $_score', style: TextStyle(fontSize: 24)),
+            child: Text(
+              'Score: $_score',
+              style: GoogleFonts.poppins(fontSize: 24, color: Colors.black87),
+            ),
           ),
           Expanded(
             child: GridView.builder(
@@ -102,9 +99,10 @@ class _MemoryGamePageState extends State<MemoryGamePage> {
                   onTap: () => _onCardTapped(index),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: card.isRevealed || card.isMatched
-                          ? Colors.white
-                          : Color(0xFF1E6F50),
+                      color:
+                          card.isRevealed || card.isMatched
+                              ? Colors.white
+                              : Color(0xFF1E6F50),
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(color: Colors.black12),
                     ),
@@ -118,10 +116,9 @@ class _MemoryGamePageState extends State<MemoryGamePage> {
                 );
               },
             ),
-          )
+          ),
         ],
       ),
     );
   }
 }
-

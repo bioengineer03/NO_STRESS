@@ -43,41 +43,54 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> _selectDate(BuildContext context) async {
-    DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime(2000),
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
-              primary: _mainColor,
-              onPrimary: Colors.white,
-              onSurface: Colors.black,
-            ),
-            textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(foregroundColor: _mainColor),
-            ),
-            textTheme: TextTheme(
-              titleLarge: GoogleFonts.poppins(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-              bodyMedium: GoogleFonts.poppins(fontSize: 16),
-            ),
+  DateTime? picked = await showDatePicker(
+    context: context,
+    initialDate: DateTime(2000),
+    firstDate: DateTime(1900),
+    lastDate: DateTime.now(),
+    builder: (context, child) {
+      return Theme(
+        data: Theme.of(context).copyWith(
+          colorScheme: ColorScheme.light(
+            primary: _mainColor,
+            onPrimary: Colors.white,
+            onSurface: Colors.black,
           ),
-          child: child!,
-        );
-      },
-    );
+          textButtonTheme: TextButtonThemeData(
+            style: TextButton.styleFrom(foregroundColor: _mainColor),
+          ),
+          textTheme: TextTheme(
+            titleLarge: GoogleFonts.poppins(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+            titleMedium: GoogleFonts.poppins(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+            ),
+            titleSmall: GoogleFonts.poppins(
+              fontSize: 16,
+            ),
+            bodyLarge: GoogleFonts.poppins(fontSize: 16),
+            bodyMedium: GoogleFonts.poppins(fontSize: 14),
+            bodySmall: GoogleFonts.poppins(fontSize: 12),
+            labelLarge: GoogleFonts.poppins(),
+            labelMedium: GoogleFonts.poppins(),
+            labelSmall: GoogleFonts.poppins(),
+          ),
+        ),
+        child: child!,
+      );
+    },
+  );
 
-    if (picked != null) {
-      setState(() {
-        _dateController.text = DateFormat('dd/MM/yyyy').format(picked);
-      });
-    }
+  if (picked != null) {
+    setState(() {
+      _dateController.text = DateFormat('dd/MM/yyyy').format(picked);
+    });
   }
+}
+
 
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
