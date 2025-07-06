@@ -100,6 +100,8 @@ class DataProvider extends ChangeNotifier {
     heartRates = [];
     sleep = [];
     stressscore = -1;
+    hrvList = [];
+    bpmList = [];
     notifyListeners();
   }
 

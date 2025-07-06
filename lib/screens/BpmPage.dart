@@ -28,7 +28,7 @@ class BPMPage extends StatelessWidget {
                 child: BPMChart(data: bpmData),
               ),
               SizedBox(height: 20),
-              Text('Valore medio del BPM: $meanBPM\nDati calcolati ogni 20 minuti',
+              Text('Average BPM: $meanBPM (ms)\nData calculated every 20 minutes',
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                 fontSize: 16,
