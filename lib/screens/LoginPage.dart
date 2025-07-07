@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
-//import 'package:no_stress/screens/OnBoarding.dart';
 import 'package:no_stress/screens/HomePage.dart';
 import 'package:no_stress/screens/OnBoardingPage.dart';
 import 'package:no_stress/services/impact.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:google_fonts/google_fonts.dart'; // Importa google_fonts
+import 'package:google_fonts/google_fonts.dart'; 
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
 
   // Variabili
-  // Inizializzo text controllers per verificare username e password inseriti
   final TextEditingController userController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final ValueNotifier<bool> obscurePassword = ValueNotifier<bool>(true);
@@ -20,7 +18,6 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
-      // Si può usare se vogliamo fare vedere solo la scritta NoStress
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(
@@ -168,7 +165,6 @@ class LoginPage extends StatelessWidget {
                           if (onboardingCompleted == null ||
                               onboardingCompleted == false) {
                             Navigator.pushReplacement(
-                              // ignore: use_build_context_synchronously
                               context,
                               MaterialPageRoute(
                                 builder: (context) => OnboardingScreen(),
@@ -177,16 +173,14 @@ class LoginPage extends StatelessWidget {
                             // Se è stato completato, va direttamente nella HomePage
                           } else {
                             Navigator.pushReplacement(
-                              // ignore: use_build_context_synchronously
                               context,
                               MaterialPageRoute(
                                 builder: (context) => const HomePage(),
                               ),
                             );
                           }
-                          // Se le credenziali sono errate, viene mostrato un messaggio di errore tramite un SnackBar
+                        // Se le credenziali sono errate, viene mostrato un messaggio di errore tramite un SnackBar
                         } else {
-                          // ignore: use_build_context_synchronously
                           ScaffoldMessenger.of(context)
                             ..removeCurrentSnackBar()
                             ..showSnackBar(
@@ -226,16 +220,13 @@ class LoginPage extends StatelessWidget {
                         userController.text,
                         passwordController.text,
                       );
-                      // If correct, store the username and password in SharedPreferences
-                      // and navigate to the Exposure screen (pushReplacement to remove the login screen from the stack)
                       if (result == 200) {
-                        // Sen è riuscito salva le credenziali in shared preferences
+                        // Se è riuscito salva le credenziali in shared preferences
                         final sp = await SharedPreferences.getInstance();
                         await sp.setString('username', userController.text);
                         await sp.setString('password', passwordController.text);
                         // Dato che è la prima volta va nell'onboarding
                         Navigator.pushReplacement(
-                          // ignore: use_build_context_synchronously
                           context,
                           MaterialPageRoute(
                             builder: (context) => OnboardingScreen(),
@@ -243,7 +234,6 @@ class LoginPage extends StatelessWidget {
                         );
                       // Se le credenziali sono errate, viene mostrato un messaggio di errore tramite un SnackBar
                       } else {
-                        // ignore: use_build_context_synchronously
                         ScaffoldMessenger.of(context)
                           ..removeCurrentSnackBar()
                           ..showSnackBar(

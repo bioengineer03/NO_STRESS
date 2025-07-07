@@ -15,15 +15,6 @@ class MyApp extends StatelessWidget {
     child: MaterialApp(
       home: SplashScreen()
     ),);
-    /* Equivalent version with MultiProvider
-    return MaterialApp(fl
-      home: MultiProvider(
-        providers: [
-          Provider<DataProvider>(create: (_) => DataProvider()),
-        ],
-        child: HomePage()),
-    );
-    */ 
   }
 }
 

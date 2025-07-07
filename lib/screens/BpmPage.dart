@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:no_stress/models/BPM.dart';
 import 'package:no_stress/utils/BPMChart.dart';
 import 'package:statistics/statistics.dart';
-//import 'package:no_stress/screens/HRVPage.dart';
 
 class BPMPage extends StatelessWidget {
   final List<BPM> bpmData;
@@ -28,7 +27,7 @@ class BPMPage extends StatelessWidget {
                 child: BPMChart(data: bpmData),
               ),
               SizedBox(height: 20),
-              Text('Average BPM: $meanBPM (ms)\nData calculated every 20 minutes',
+              Text('Average BPM: $meanBPM \nData calculated every 20 minutes',
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                 fontSize: 16,

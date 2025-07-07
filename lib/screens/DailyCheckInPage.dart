@@ -264,6 +264,4 @@ class _DailyCheckInPageState extends State<DailyCheckInPage> {
   }
 }
 
-/*extension on DataProvider {
-  void updateStressScore(int stressChange) {}
-}*/
+

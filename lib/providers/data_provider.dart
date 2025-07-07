@@ -1,5 +1,7 @@
 //import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 import 'package:no_stress/models/BPM.dart';
 import 'package:no_stress/models/HR.dart';
 import 'package:no_stress/models/Sleep.dart';
@@ -44,6 +46,12 @@ class DataProvider extends ChangeNotifier {
     _loading();
     currentDate = date;
 
+    //Uso SharedPreferences per salvare il punteggio di stress aggiornato eventualmente
+    //alla data corrente
+    final prefs = await SharedPreferences.getInstance();
+    final key = 'stressscore_${DateFormat('yyyy-MM-dd').format(date)}';
+    final savedScore = prefs.getDouble(key);
+
     // Aggiungo un try e catch per evitare crush qual'ora non vengano presi
     //correttamente i dati del giorno
     
@@ -60,26 +68,13 @@ class DataProvider extends ChangeNotifier {
       sleep = [];
     }
     
-    /*
-    // Ho creato una lista che raccoglie i valori di stress score di tutta la settimana
-    for (int i = 0; i < 7; i++) {
-      DateTime data = date.subtract(Duration(days: i));
-      try {
-        heartRates = await impact.getHRdata(data);
-      } catch (e) {
-        heartRates = [];
-      }
-      try {
-        sleep = await impact.getSleepdata(data);
-      } catch (e) {
-        sleep = [];
-      }
-      stressscore_temp = _calculateStressScore(heartRates, sleep);
-      weekStressscore.add(stressscore);
-    }
-    */
-    
     stressscore = _calculateStressScore(heartRates, sleep);
+    // Provo a leggere il valore da SharedPreferences così tengo eventualmente il valore aggiornato
+    // di stressscore
+    if (savedScore != null) {
+      stressscore = savedScore;
+    }
+
     meanBPM = _meanBPM(heartRates);
 
     hrvTrend = _getHRVTrend(
@@ -145,9 +140,15 @@ class DataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateStressScore(double change) {
+  void updateStressScore(double change) async {
     stressscore = (stressscore + change).clamp(0, 100);
+
+    final prefs = await SharedPreferences.getInstance();
+    final key = 'stressscore_${DateFormat('yyyy-MM-dd').format(currentDate)}';
+    await prefs.setDouble(key, stressscore);
+
     notifyListeners(); // Notifica i listener (come HomePage) del cambiamento
+
   }
 
   List<Map<String, dynamic>> _getHRVTrend(

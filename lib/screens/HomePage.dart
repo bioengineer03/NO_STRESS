@@ -48,7 +48,6 @@ class HomePage extends StatelessWidget {
                   fontSize: 16,
                   color: Color(0xFF1E6F50),
                 ),
-                //style: TextStyle(fontSize: 16, color: Color(0xFF1E6F50),fontStyle: GoogleFonts.poppins()),
               ),
               onTap: () {
                 Navigator.push(
@@ -65,15 +64,12 @@ class HomePage extends StatelessWidget {
                   fontSize: 16,
                   color: Color(0xFF1E6F50),
                 ),
-                //style: TextStyle(fontSize: 16, color: Color(0xFF1E6F50)),
               ),
               onTap: () async {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => LoginPage()),
                 );
-                // La nostra idea è tenere memorizzati accesse refresh token per cui quando torna nella Login si sovrascrivono
-                // Chiedere se effettivamente vengono sovrascritti, oppure se è meglio cancellarli e rifare la procedura effettiva di login
                 final sp = await SharedPreferences.getInstance();
                 await sp.remove('access');
                 await sp.remove('refresh');
@@ -95,20 +91,6 @@ class HomePage extends StatelessWidget {
                 );
               },
             ),
-            /*ListTile(
-              leading: Icon(Icons.gamepad),
-              title: Text(
-                'RELAX',
-                style: TextStyle(fontSize: 16, color: Color(0xFF1E6F50)),
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MiniGamePage()),
-                );
-              },
-            ),
-            */
             ListTile(
               leading: Icon(Icons.memory),
               title: Text(
@@ -188,7 +170,6 @@ class HomePage extends StatelessWidget {
                                 // InkWell widget is used to make the icons clickable
                                 child: InkWell(
                                   onTap: () {
-                                    // function that calls the provider function passing the date before the current date
                                     provider.subtractDay();
                                   },
                                   child: const Icon(Icons.navigate_before),
@@ -207,7 +188,6 @@ class HomePage extends StatelessWidget {
                                 padding: const EdgeInsets.all(8.0),
                                 child: InkWell(
                                   onTap: () {
-                                    // function that calls the provider function passing the date after the current date
                                     provider.addDay();
                                   },
                                   child: const Icon(Icons.navigate_next),
@@ -363,48 +343,6 @@ class HomePage extends StatelessWidget {
                                                   );
                                                 }
                                               },
-
-                                              /*
-                                              onPressed: () async {
-                                                final sp =
-                                                    await SharedPreferences.getInstance();
-                                                final dateKey = DateFormat('yyyy-MM-dd').format(provider.currentDate);
-                                                final daily_completed =
-                                                    sp.getBool(
-                                                      'dailycheckin_completed_$dateKey',
-                                                    ) ??
-                                                    false;
-                                                if (daily_completed) {
-                                                  ScaffoldMessenger.of(
-                                                    context,
-                                                  ).showSnackBar(
-                                                    SnackBar(
-                                                      content: Text(
-                                                        'You have already completed the daily check-in today!',
-                                                        style:
-                                                            GoogleFonts.poppins(
-                                                              fontSize: 16,
-                                                              color:
-                                                                  Colors.white,
-                                                            ),
-                                                      ),
-                                                      backgroundColor: Color(
-                                                        0xFF1E6F50,
-                                                      ),
-                                                    ),
-                                                  );
-                                                } else {
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder:
-                                                          (context) =>
-                                                              DailyCheckInPage(),
-                                                    ),
-                                                  );
-                                                }
-                                              },
-                                              */
                                               icon: Icon(
                                                 Icons.edit_note,
                                                 color: Colors.white,
@@ -446,7 +384,6 @@ class HomePage extends StatelessWidget {
                 SizedBox(height: 20),
                 Consumer<DataProvider>(
                   builder: (context, dataProvider, child) {
-                    //final hrvTrend = dataProvider.hrvTrend;
                     final hrvList = dataProvider.hrvList;
                     final meanHRV =
                         hrvList.isNotEmpty
@@ -459,7 +396,6 @@ class HomePage extends StatelessWidget {
                     // Mostro la card con l'ultimo valore di HRV
                     return HealthStatCard(
                       title: 'HRV',
-                      // ignore: unnecessary_null_comparison
                       value: meanHRV != null ? '$meanHRV ms' : '--',
                       subtitle: 'Mean value',
                       icon: Icons.monitor_heart,
@@ -480,7 +416,6 @@ class HomePage extends StatelessWidget {
                 SizedBox(height: 20),
                 Consumer<DataProvider>(
                   builder: (context, dataProvider, child) {
-                    //final bpmTrend = dataProvider.hrvTrend;
                     final bpmList = dataProvider.bpmList;
                     final meanBPM =
                         bpmList.isNotEmpty
@@ -493,7 +428,6 @@ class HomePage extends StatelessWidget {
                     // Mostro la card con l'ultimo valore di BPM
                     return HealthStatCard(
                       title: 'BPM',
-                      // ignore: unnecessary_null_comparison
                       value: meanBPM != null ? '$meanBPM' : '--',
                       subtitle: 'Mean value',
                       icon: Icons.monitor_heart,
@@ -509,39 +443,6 @@ class HomePage extends StatelessWidget {
                     );
                   }, // builder
                 ),
-
-                /*
-                // INSERISCO LA CARD PER IL TREND DELLo STRESS SCORE NELLA SETTIMANA
-                SizedBox(height: 20),
-                Consumer<DataProvider>(
-                  builder: (context, dataProvider, child) {
-                    //final bpmTrend = dataProvider.hrvTrend;
-                    final weeklystressscore = dataProvider.weekStressscore;
-                    final stressscoretoday = weeklystressscore.first;
-                    final data = dataProvider.currentDate;
-                    // Controllo se hrvList è vuota
-                    if (weeklystressscore.isEmpty) {
-                      return Container();
-                    }
-                    // Mostro la card con l'ultimo valore di BPM
-                    return HealthStatCard(
-                      title: 'Stress Score settimanale',
-                      value: stressscoretoday != null ? '$stressscoretoday' : '--',
-                      subtitle: 'Stress Score di oggi',
-                      icon: Icons.monitor_heart,
-                      color: Color(0xFF1E6F50),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => StressScoreBarChart(stressScores: weeklystressscore, today: data),
-                          ),
-                        );
-                      },
-                    );
-                  }, // builder
-                ),
-                */
               ], // children
             ),
           ),

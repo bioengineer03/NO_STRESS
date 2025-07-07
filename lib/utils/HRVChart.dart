@@ -17,7 +17,7 @@ class HRVChart extends StatelessWidget {
         majorGridLines: const MajorGridLines(width: 0),
       ),
       primaryYAxis: NumericAxis(
-        title: AxisTitle(text: 'SDNN (ms)'),
+        title: AxisTitle(text: 'RR peaks (ms)'),
         minimum: 0,
         maximum: 200,
         // puoi settare max se vuoi

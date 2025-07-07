@@ -1,6 +1,3 @@
-/*Questo codice definisce una classe Dart chiamata HR, pensata per rappresentare 
-un singolo valore di frequenza cardiaca (Heart Rate) associato a un timestamp.
-*/
 import 'package:intl/intl.dart';
 
 class HR{

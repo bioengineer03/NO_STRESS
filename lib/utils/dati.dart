@@ -1,8 +1,6 @@
 import 'dart:math';
-
 import 'package:no_stress/models/HR.dart';
 import 'package:no_stress/models/Sleep.dart';
-//import 'dart:math' as math;
 
 
 class Dati {

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:no_stress/screens/HomePage.dart'; // Importa la tua HomePage
+import 'package:no_stress/screens/HomePage.dart'; 
 
 class BreathingPage extends StatefulWidget {
   @override

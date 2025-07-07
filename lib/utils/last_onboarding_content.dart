@@ -38,7 +38,8 @@ class LastOnboardingPageContent extends StatelessWidget {
             content.title,
             textAlign: TextAlign.center,
             style: GoogleFonts.poppins(
-                color: const Color.fromARGB(255, 16, 18, 17),
+              fontWeight: FontWeight.w600,
+                color: Colors.black87,
                 fontSize: 28,
             ),
           ),
@@ -111,7 +112,7 @@ class LastOnboardingPageContent extends StatelessWidget {
                 floatingLabelStyle: GoogleFonts.poppins(
                   color: Color(0xFF1E6F50),
                 ),
-                hintText: 'Enter your nickname',
+                hintText: 'Enter your gender',
                 hintStyle: GoogleFonts.poppins(color: Color(0xFF1E6F50)),
                 filled: true,
                 fillColor: Colors.white,

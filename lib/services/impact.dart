@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
 
 class Impact {
-  // Variabili statistiche, ustae per costruire gli URL delle richieste HTTP verso l'API
+  // Variabili statistiche, usate per costruire gli URL delle richieste HTTP verso l'API
   static String baseUrl = 'https://impact.dei.unipd.it/bwthw/';
   static String pingEndpoint = 'gate/v1/ping/';
   static String tokenEndpoint = 'gate/v1/token/';
@@ -19,13 +19,10 @@ class Impact {
   static String heartrateEndpoint = 'data/v1/heart_rate/patients/';
   static String sleepEndpoint = 'data/v1/sleep/patients/';
 
-  //static String username = 'gMQWqcZXKO';
-  //static String password = '12345678!';
-
   static String patientUsername = 'Jpefaq6m58';
 
   /// ------ Metodi -------
-  // Metodo AUTHORIZE (asincrono): ottiene il JWT Token da Impact e lo salva in Shared_Preferences
+  // Metodo AUTHORIZE
   Future<int?> authorize(String username, String password) async {
     // Richiesta
     final url = Impact.baseUrl + Impact.tokenEndpoint;
@@ -52,7 +49,6 @@ class Impact {
   }
 
   // Metodo REFRESHTOKENS
-  // Aggiorna il token di accesso usando il refresh token salvato localmente
   Future<int> refreshTokens() async {
     //Create the request
     final url = Impact.baseUrl + Impact.refreshEndpoint;
@@ -95,7 +91,6 @@ class Impact {
     //Initialize the result
     List<HR> result = [];
 
-    //Get the stored access token (Note that this code does not work if the tokens are null)
     final sp = await SharedPreferences.getInstance();
     var access = sp.getString('access');
     var refresh = sp.getString('refresh');
@@ -105,7 +100,6 @@ class Impact {
     // Punto esclamativo su access token perchè potrebbe non esserci
     if (JwtDecoder.isExpired(access!)) {
       // ACCESS TOKEN SCADUTO --> valuto il REFRESH TOKEN che mi permette di generare il nuovo access token
-      // Attenzione!! Verificare se REFRESH TOKEN E' SCADUTO oppure NO
       if (JwtDecoder.isExpired(refresh!)) {
         // ACCESS & REFRESH TOKEN SCADUTI ---> Logout e torno alla LoginPage
         final sp = await SharedPreferences.getInstance();
@@ -116,6 +110,7 @@ class Impact {
         // Caso in cui il refresh token non è scaduto!
         await refreshTokens();
         access = sp.getString('access');
+        refresh = sp.getString('refresh');
       }
     } //if
     // NON ENTRO NELL'IF SOPRA NEL MOMENTO IN CUI IL MIO ACCESS TOKEN NON E' SCADUTO
@@ -138,9 +133,7 @@ class Impact {
       print(decodedResponse['data']['date']);
       print(decodedResponse['data']['date'][0]);
       print(decodedResponse['data']['date'][0].runtimeType);
-      // In Body di Response c'è un campo dato dal dizionario data di heartrate, costituito da coppie tempo-valore
-      // Solo due valori, perchè abbiamo costruito HR in modo da prendere solo tempo e valore di bpm (confidence) non ci serve
-
+    
       for (var i = 0; i < decodedResponse['data']['data'].length; i++) {
         result.add(
           HR.fromJson(
@@ -170,11 +163,8 @@ class Impact {
     // Punto esclamativo su access token perchè potrebbe non esserci
     if (JwtDecoder.isExpired(access!)) {
       // ACCESS TOKEN SCADUTO --> valuto il REFRESH TOKEN che mi permette di generare il nuovo access token
-      // Attenzione!! Verificare se REFRESH TOKEN E' SCADUTO oppure NO
       if (JwtDecoder.isExpired(refresh!)) {
-        // Caso in cui il refresh token è scaduto --> occorre implementare lo stesso percorso fatto da authorize
-        // Come "crittografare" username e password?
-        // ----------------- DA FARE -------------------------
+        // Caso in cui il refresh token è scaduto 
         final sp = await SharedPreferences.getInstance();
         await sp.remove('access');
         await sp.remove('refresh');
@@ -183,6 +173,7 @@ class Impact {
         // Caso in cui il refresh token non è scaduto!
         await refreshTokens();
         access = sp.getString('access');
+        refresh = sp.getString('refresh');
       }
     } //if
     // NON ENTRO NELL'IF SOPRA NEL MOMENTO IN CUI IL MIO ACCESS TOKEN NON E' SCADUTO
@@ -202,17 +193,13 @@ class Impact {
     final response = await http.get(Uri.parse(url), headers: headers);
 
     //if OK parse the response, otherwise return null
-    //if OK parse the response, otherwise return null
     if (response.statusCode == 200) {
       final decodedResponse = jsonDecode(response.body);
 
-      final dateStr = decodedResponse['data']['date'][0]; // CORRETTO
-      // In Body di Response c'è un campo dato dal dizionario data di sleep, costituito da triplette datainiziosonno - livellosonno - secondisessione
+      final dateStr = decodedResponse['data']['date'][0]; 
       for (var i = 0; i < decodedResponse['data']['data'].length; i++) {
         result.add(Sleep.fromJson(dateStr, decodedResponse['data']['data'][i]));
       } //for
-
-      // In Body di Response c'è un campo dato dal dizionario data di sleep, costituito da triplette datainiziosonno - livellosonno - secondisessione
     }
 
     //Return the result

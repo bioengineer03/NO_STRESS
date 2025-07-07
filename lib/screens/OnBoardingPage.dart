@@ -107,22 +107,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               return OnboardingPage(content: onboardingPages[index]);
             },
           ),
-          // Pulsante "Salta" (Skip) in alto a destra
-          Positioned(
-            top: 20,
-            right: 20,
-            child: TextButton(
-              onPressed: _navigateToHome, // Salta direttamente alla home
-              child: Text(
-                'Skip',
-                style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 19,
-                  color: Colors.grey,
-                ),
-              ),
-            ),
-          ),
           // Controlli in basso (indicatori e pulsante)
           Align(
             alignment: Alignment.bottomCenter,
